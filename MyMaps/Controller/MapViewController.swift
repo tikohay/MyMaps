@@ -72,8 +72,10 @@ class MapViewController: UIViewController {
     private var marker: GMSMarker?
     private var manualMarker: GMSMarker?
     private var geocoder = CLGeocoder()
+    var route: GMSPolyline?
+    var routePath: GMSMutablePath?
     
-    private var locationManager: CLLocationManager?
+    private var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -168,16 +170,23 @@ extension MapViewController {
     @objc private func updateLocationButtonTapped() {
         isUpdatedLocation.toggle()
         if isUpdatedLocation {
-            locationManager?.startUpdatingLocation()
+            route?.map = nil
+            route = GMSPolyline()
+            routePath = GMSMutablePath()
+            route?.map = mapView
+            
+            locationManager.startUpdatingLocation()
             updateLocationButton.setImage(UIImage(systemName: "figure.stand"), for: .normal)
         } else {
-            locationManager?.stopUpdatingLocation()
+            locationManager.stopUpdatingLocation()
             updateLocationButton.setImage(UIImage(systemName: "figure.walk"), for: .normal)
         }
     }
     
     @objc private func requestLocationButtonTapped() {
-        locationManager?.requestLocation()
+//        let bounds = GMSCoordinateBounds(path: routePath!)
+//        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+        locationManager.requestLocation()
     }
     
     @objc private func mapTypeButtonTapped() {
@@ -230,9 +239,11 @@ extension MapViewController {
     }
     
     private func configureLocationManager() {
-        locationManager = CLLocationManager()
-        locationManager?.requestWhenInUseAuthorization()
-        locationManager?.delegate = self
+        locationManager.delegate = self
+        locationManager.allowsBackgroundLocationUpdates = true
+        locationManager.pausesLocationUpdatesAutomatically = false
+//        locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.requestAlwaysAuthorization()
     }
 }
 
@@ -253,10 +264,14 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        mapView.animate(toLocation: location.coordinate)
-        let marker = GMSMarker(position: location.coordinate)
-        marker.map = mapView
-        marker.icon = GMSMarker.markerImage(with: .green)
+//        mapView.animate(toLocation: location.coordinate)
+//        let marker = GMSMarker(position: location.coordinate)
+//        marker.map = mapView
+//        marker.icon = GMSMarker.markerImage(with: .green)
+        routePath?.add(location.coordinate)
+        route?.path = routePath
+        let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 70)
+        mapView.animate(to: position)
         geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
             print(places?.first ?? "couldn't find place")
         })
