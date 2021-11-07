@@ -224,19 +224,20 @@ extension MapViewController {
     }
     
     @objc private func showLastPathButtonTapped() {
-        route?.map = nil
-        routePath = GMSMutablePath()
-        route = GMSPolyline()
-        locationRealm.getAllLocations { locations in
-            for location in locations {
-                self.routePath?.add(location)
-                self.route?.path = routePath
-                route?.strokeColor = .blue
-                route?.strokeWidth = 10
-                route?.map = mapView
+        if isUpdatedLocation {
+            let toVC = InfoAlert(title: "Need to stop tracking", text: "Stop tracking ?")
+            toVC.modalPresentationStyle = .overCurrentContext
+            toVC.modalTransitionStyle = .crossDissolve
+            toVC.onOkButtonTapped = {
+                self.isUpdatedLocation = false
+                self.locationManager.stopUpdatingLocation()
+                self.locationRealm.deleteAllLocations()
+                self.locationRealm.addCoordinate(self.allLocations)
+                self.createPathFromLocations()
             }
-            let bounds = GMSCoordinateBounds(path: routePath!)
-            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+            self.present(toVC, animated: true, completion: nil)
+        } else {
+            createPathFromLocations()
         }
     }
 }
@@ -284,6 +285,23 @@ extension MapViewController {
 //        locationManager.startMonitoringSignificantLocationChanges()
         locationManager.requestAlwaysAuthorization()
     }
+    
+    private func createPathFromLocations() {
+        route?.map = nil
+        routePath = GMSMutablePath()
+        route = GMSPolyline()
+        locationRealm.getAllLocations { locations in
+            for location in locations {
+                self.routePath?.add(location)
+                self.route?.path = routePath
+                route?.strokeColor = .blue
+                route?.strokeWidth = 10
+                route?.map = mapView
+            }
+            let bounds = GMSCoordinateBounds(path: routePath!)
+            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+        }
+    }
 }
 
 extension MapViewController: GMSMapViewDelegate {
@@ -317,8 +335,3 @@ extension MapViewController: CLLocationManagerDelegate {
         print(error)
     }
 }
-
-
-
-//        let bounds = GMSCoordinateBounds(path: routePath!)
-//        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
