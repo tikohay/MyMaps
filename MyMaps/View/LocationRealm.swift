@@ -19,7 +19,7 @@ class LocationRealm: Object, Decodable {
             realm.beginWrite()
             for coordinate in coordinates {
                 let location = LocationRealm()
-                location.latitude = coordinate.longitude
+                location.latitude = coordinate.latitude
                 location.longitude = coordinate.longitude
                 realm.add(location)
             }

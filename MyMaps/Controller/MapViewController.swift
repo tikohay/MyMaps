@@ -65,6 +65,15 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    private let showLastPathButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("show the last path", for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private var isAddedMarker = false
     private var isUpdatedLocation = false
     
@@ -125,13 +134,17 @@ extension MapViewController {
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         mapView.addSubview(buttonsStackView)
+        mapView.addSubview(showLastPathButton)
         
         NSLayoutConstraint.activate([
             addMarkerButton.heightAnchor.constraint(equalToConstant: 35),
             
             buttonsStackView.widthAnchor.constraint(equalToConstant: 40),
             buttonsStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            buttonsStackView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -10)
+            buttonsStackView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -10),
+            
+            showLastPathButton.trailingAnchor.constraint(equalTo: mapView.trailingAnchor),
+            showLastPathButton.bottomAnchor.constraint(equalTo: mapView.bottomAnchor)
         ])
     }
 }
@@ -154,6 +167,9 @@ extension MapViewController {
         mapTypeButton.addTarget(self,
                                 action: #selector(mapTypeButtonTapped),
                                 for: .touchUpInside)
+        showLastPathButton.addTarget(self,
+                                     action: #selector(showLastPathButtonTapped),
+                                     for: .touchUpInside)
     }
     
     @objc private func myPositionButtonTapped() {
@@ -192,20 +208,7 @@ extension MapViewController {
     }
     
     @objc private func requestLocationButtonTapped() {
-//        locationManager.requestLocation()
-        routePath = GMSMutablePath()
-        route = GMSPolyline()
-        locationRealm.getAllLocations { locations in
-            for location in locations {
-                self.routePath?.add(location)
-                self.route?.path = routePath
-                route?.strokeColor = .black
-                route?.strokeWidth = 10
-                route?.map = mapView
-            }
-            let bounds = GMSCoordinateBounds(path: routePath!)
-            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
-        }
+        locationManager.requestLocation()
     }
     
     @objc private func mapTypeButtonTapped() {
@@ -218,6 +221,23 @@ extension MapViewController {
         toVC.modalPresentationStyle = .overCurrentContext
         toVC.modalTransitionStyle = .crossDissolve
         self.present(toVC, animated: true, completion: nil)
+    }
+    
+    @objc private func showLastPathButtonTapped() {
+        route?.map = nil
+        routePath = GMSMutablePath()
+        route = GMSPolyline()
+        locationRealm.getAllLocations { locations in
+            for location in locations {
+                self.routePath?.add(location)
+                self.route?.path = routePath
+                route?.strokeColor = .blue
+                route?.strokeWidth = 10
+                route?.map = mapView
+            }
+            let bounds = GMSCoordinateBounds(path: routePath!)
+            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+        }
     }
 }
 
