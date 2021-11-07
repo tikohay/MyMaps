@@ -8,6 +8,7 @@ target 'MyMaps' do
   # Pods for MyMaps
 	
 	pod 'GoogleMaps'
+	pod 'RealmSwift'
 
   target 'MyMapsTests' do
     inherit! :search_paths

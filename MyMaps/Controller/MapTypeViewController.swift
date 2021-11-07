@@ -11,7 +11,6 @@ import GoogleMaps
 class MapTypeViewController: UIViewController {
     
     var containerViewFrame: CGRect?
-    
     var onTypeButton: ((GMSMapViewType) -> ())?
     
     private let containerView: UIView = {
@@ -65,7 +64,6 @@ extension MapTypeViewController {
         for (i, button) in typeButtons.enumerated() {
             button.setTitle(MapType.types[i].rawValue, for: .normal)
         }
-        
         let stackView = UIStackView(arrangedSubviews: typeButtons)
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -76,7 +74,6 @@ extension MapTypeViewController {
         stackView.frame = containerView.bounds
     }
 }
-
 
 //MARK: - Add targets and recognizers
 extension MapTypeViewController {

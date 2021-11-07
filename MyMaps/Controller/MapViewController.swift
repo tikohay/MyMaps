@@ -8,6 +8,7 @@
 import UIKit
 import GoogleMaps
 import CoreLocation
+import RealmSwift
 
 class MapViewController: UIViewController {
     
@@ -72,8 +73,11 @@ class MapViewController: UIViewController {
     private var marker: GMSMarker?
     private var manualMarker: GMSMarker?
     private var geocoder = CLGeocoder()
-    var route: GMSPolyline?
-    var routePath: GMSMutablePath?
+    private var route: GMSPolyline?
+    private var routePath: GMSMutablePath?
+    private var allLocations:[CLLocationCoordinate2D] = []
+    
+    let locationRealm = LocationRealm()
     
     private var locationManager = CLLocationManager()
 
@@ -184,9 +188,22 @@ extension MapViewController {
     }
     
     @objc private func requestLocationButtonTapped() {
-//        let bounds = GMSCoordinateBounds(path: routePath!)
-//        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
-        locationManager.requestLocation()
+//        locationManager.requestLocation()
+        routePath = GMSMutablePath()
+        route = GMSPolyline()
+        locationRealm.getAllLocations { locations in
+            for location in locations {
+                self.routePath?.add(location)
+                self.route?.path = routePath
+                route?.strokeColor = .black
+                route?.strokeWidth = 10
+                route?.map = mapView
+            }
+            let bounds = GMSCoordinateBounds(path: routePath!)
+            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+            
+        }
+        
     }
     
     @objc private func mapTypeButtonTapped() {
@@ -264,13 +281,10 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-//        mapView.animate(toLocation: location.coordinate)
-//        let marker = GMSMarker(position: location.coordinate)
-//        marker.map = mapView
-//        marker.icon = GMSMarker.markerImage(with: .green)
+        locationRealm.addCoordinate(location.coordinate)
         routePath?.add(location.coordinate)
         route?.path = routePath
-        let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 70)
+        let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
         mapView.animate(to: position)
         geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
             print(places?.first ?? "couldn't find place")
@@ -281,3 +295,8 @@ extension MapViewController: CLLocationManagerDelegate {
         print(error)
     }
 }
+
+
+
+//        let bounds = GMSCoordinateBounds(path: routePath!)
+//        self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
