@@ -174,6 +174,8 @@ extension MapViewController {
     @objc private func updateLocationButtonTapped() {
         isUpdatedLocation.toggle()
         if isUpdatedLocation {
+            allLocations = []
+            
             route?.map = nil
             route = GMSPolyline()
             routePath = GMSMutablePath()
@@ -183,6 +185,8 @@ extension MapViewController {
             updateLocationButton.setImage(UIImage(systemName: "figure.stand"), for: .normal)
         } else {
             locationManager.stopUpdatingLocation()
+            locationRealm.deleteAllLocations()
+            locationRealm.addCoordinate(allLocations)
             updateLocationButton.setImage(UIImage(systemName: "figure.walk"), for: .normal)
         }
     }
@@ -201,9 +205,7 @@ extension MapViewController {
             }
             let bounds = GMSCoordinateBounds(path: routePath!)
             self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
-            
         }
-        
     }
     
     @objc private func mapTypeButtonTapped() {
@@ -281,7 +283,7 @@ extension MapViewController: GMSMapViewDelegate {
 extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
-        locationRealm.addCoordinate(location.coordinate)
+        allLocations.append(location.coordinate)
         routePath?.add(location.coordinate)
         route?.path = routePath
         let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
