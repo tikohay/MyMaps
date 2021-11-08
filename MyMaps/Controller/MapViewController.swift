@@ -84,11 +84,13 @@ class MapViewController: UIViewController {
     private var geocoder = CLGeocoder()
     private var route: GMSPolyline?
     private var routePath: GMSMutablePath?
+    
+    private var locationManager = CLLocationManager()
+    
     private var allLocations:[CLLocationCoordinate2D] = []
     
     let locationRealm = LocationRealm()
     
-    private var locationManager = CLLocationManager()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,13 +103,13 @@ class MapViewController: UIViewController {
 }
 
 //MARK: - Setup views
-extension MapViewController {
-    private func setupViews() {
+private extension MapViewController {
+    func setupViews() {
         setupMapView()
         setupButtons()
     }
     
-    private func setupMapView() {
+    func setupMapView() {
         view.addSubview(mapView)
         
         mapView.translatesAutoresizingMaskIntoConstraints = false
@@ -120,7 +122,7 @@ extension MapViewController {
         ])
     }
     
-    private func setupButtons() {
+    func setupButtons() {
         buttonsStackView = UIStackView(arrangedSubviews: [myPositionButton,
                                                           addMarkerButton,
                                                           updateLocationButton,
@@ -150,8 +152,8 @@ extension MapViewController {
 }
 
 //MARK: - Add targets and recognizers
-extension MapViewController {
-    private func addTargetToButton() {
+private extension MapViewController {
+    func addTargetToButton() {
         myPositionButton.addTarget(self,
                                    action: #selector(myPositionButtonTapped),
                                    for: .touchUpInside)
@@ -172,11 +174,11 @@ extension MapViewController {
                                      for: .touchUpInside)
     }
     
-    @objc private func myPositionButtonTapped() {
+    @objc func myPositionButtonTapped() {
         mapView.animate(toLocation: mapCoordinate)
     }
     
-    @objc private func addMarkerButtonTapped() {
+    @objc func addMarkerButtonTapped() {
         isAddedMarker.toggle()
         if isAddedMarker {
             addMarkerButton.setImage(UIImage(systemName: "mappin.slash"), for: .normal)
@@ -187,7 +189,7 @@ extension MapViewController {
         }
     }
     
-    @objc private func updateLocationButtonTapped() {
+    @objc func updateLocationButtonTapped() {
         isUpdatedLocation.toggle()
         if isUpdatedLocation {
             allLocations = []
@@ -207,11 +209,11 @@ extension MapViewController {
         }
     }
     
-    @objc private func requestLocationButtonTapped() {
+    @objc func requestLocationButtonTapped() {
         locationManager.requestLocation()
     }
     
-    @objc private func mapTypeButtonTapped() {
+    @objc func mapTypeButtonTapped() {
         let frame = buttonsStackView?.convert(mapTypeButton.frame, to: self.view)
         let toVC = MapTypeViewController()
         toVC.containerViewFrame = frame
@@ -223,7 +225,7 @@ extension MapViewController {
         self.present(toVC, animated: true, completion: nil)
     }
     
-    @objc private func showLastPathButtonTapped() {
+    @objc func showLastPathButtonTapped() {
         if isUpdatedLocation {
             let toVC = InfoAlert(title: "Need to stop tracking", text: "Stop tracking ?")
             toVC.modalPresentationStyle = .overCurrentContext
@@ -243,22 +245,22 @@ extension MapViewController {
 }
 
 //MARK: - Configure map and location
-extension MapViewController {
-    private func configureMap() {
+private extension MapViewController {
+    func configureMap() {
         configureMapCoordinate()
         mapView.delegate = self
     }
     
-    private func configureLocation() {
+    func configureLocation() {
         configureLocationManager()
     }
     
-    private func configureMapCoordinate() {
+    func configureMapCoordinate() {
         let camera = GMSCameraPosition(target: mapCoordinate, zoom: 17)
         mapView.camera = camera
     }
     
-    private func configureMapStyle() {
+    func configureMapStyle() {
         do {
             mapView.mapStyle = try GMSMapStyle(jsonString: MapStyleJson.style)
         } catch {
@@ -266,27 +268,27 @@ extension MapViewController {
         }
     }
     
-    private func addMarker() {
+    func addMarker() {
         marker = GMSMarker(position: mapCoordinate)
         marker?.map = mapView
         marker?.title = "Moscow"
         marker?.snippet = "Hello"
     }
     
-    private func removeMarker() {
+    func removeMarker() {
         marker?.map = nil
         marker = nil
     }
     
-    private func configureLocationManager() {
+    func configureLocationManager() {
         locationManager.delegate = self
         locationManager.allowsBackgroundLocationUpdates = true
         locationManager.pausesLocationUpdatesAutomatically = false
-//        locationManager.startMonitoringSignificantLocationChanges()
+        locationManager.startMonitoringSignificantLocationChanges()
         locationManager.requestAlwaysAuthorization()
     }
     
-    private func createPathFromLocations() {
+    func createPathFromLocations() {
         route?.map = nil
         routePath = GMSMutablePath()
         route = GMSPolyline()

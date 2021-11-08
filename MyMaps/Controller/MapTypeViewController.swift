@@ -42,14 +42,14 @@ class MapTypeViewController: UIViewController {
 }
 
 //MARK: - Setup view
-extension MapTypeViewController {
-    private func setupView() {
+private extension MapTypeViewController {
+    func setupView() {
         view.backgroundColor = .clear
         setupTestView()
         setupTypeButtons()
     }
     
-    private func setupTestView() {
+    func setupTestView() {
         view.addSubview(containerView)
         
         guard let containterViewFrame = containerViewFrame else { return }
@@ -60,10 +60,11 @@ extension MapTypeViewController {
                                     height: 120)
     }
     
-    private func setupTypeButtons() {
-        for (i, button) in typeButtons.enumerated() {
-            button.setTitle(MapType.types[i].rawValue, for: .normal)
-        }
+    func setupTypeButtons() {
+        typeButtons
+            .enumerated()
+            .forEach({ $0.element.setTitle(MapType.types[$0.offset].rawValue, for: .normal) })
+        
         let stackView = UIStackView(arrangedSubviews: typeButtons)
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
@@ -76,18 +77,18 @@ extension MapTypeViewController {
 }
 
 //MARK: - Add targets and recognizers
-extension MapTypeViewController {
+private extension MapTypeViewController {
     
-    private func addRecognizers() {
+    func addRecognizers() {
         let tapViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         view.addGestureRecognizer(tapViewGesture)
     }
     
-    @objc private func dismissController() {
+    @objc func dismissController() {
         dismiss(animated: true, completion: nil)
     }
     
-    @objc private func typeButtonTapped(_ sender: UIButton) {
+    @objc func typeButtonTapped(_ sender: UIButton) {
         switch MapType(rawValue: sender.titleLabel?.text ?? "normal") {
         case .normal:
             onTypeButton?(.normal)

@@ -167,6 +167,8 @@
 		3CBD4D0827327A1900151A9A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */,
+				3C0A0D8A2737C2F4006C1B98 /* LocationRealm.swift */,
 				3CBD4D0E273297A600151A9A /* MapStyleJson.swift */,
 			);
 			path = Model;
@@ -176,8 +178,6 @@
 			isa = PBXGroup;
 			children = (
 				3C0A0D8E27381507006C1B98 /* Extensions */,
-				3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */,
-				3C0A0D8A2737C2F4006C1B98 /* LocationRealm.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

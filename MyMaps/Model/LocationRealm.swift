@@ -34,6 +34,7 @@ class LocationRealm: Object, Decodable {
             let realm = try Realm()
             let objects = realm.objects(LocationRealm.self)
             var locations: [CLLocationCoordinate2D] = []
+            
             for location in objects {
                 let loc = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
                 locations.append(loc)

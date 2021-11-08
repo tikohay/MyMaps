@@ -8,23 +8,22 @@
 import UIKit
 
 class InfoAlert: UIViewController {
-    var isConfirmationAlert: Bool = false
-    
     var onOkButtonTapped: (() -> ())?
     
-    var blurView = UIVisualEffectView()
-    let alertView = UIView()
-    let titleLabel = UILabel()
-    let textLabel = UILabel()
-    let okButton = ExtendedButton(title: "Ok",
+    private var blurView = UIVisualEffectView()
+    private let alertView = UIView()
+    private let titleLabel = UILabel()
+    private let textLabel = UILabel()
+    private let okButton = ExtendedButton(title: "Ok",
                                   backgroundColor: .blue,
                                   titleColor: .white)
-    let cancelButton = ExtendedButton(title: "cancel",
+    private let cancelButton = ExtendedButton(title: "cancel",
                                       backgroundColor: .red,
                                       titleColor: .white)
+    private var buttonStackView: UIStackView?
     
-    var titleText: String?
-    var descriptionText: String?
+    private var titleText: String?
+    private var descriptionText: String?
     
     convenience init(title: String, text: String) {
         self.init()
@@ -41,15 +40,15 @@ class InfoAlert: UIViewController {
 }
 
 //MARK: - Setup views
-extension InfoAlert {
-    private func setupViews() {
+private extension InfoAlert {
+    func setupViews() {
         setupBlurView()
         setupAlertView()
         setupLabels()
         setupConstraints()
     }
     
-    private func setupBlurView() {
+    func setupBlurView() {
         let blur = UIBlurEffect(style: .systemUltraThinMaterialDark)
         blurView = UIVisualEffectView(effect: blur)
         blurView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +56,7 @@ extension InfoAlert {
         view.addSubview(blurView)
     }
     
-    private func setupAlertView() {
+    func setupAlertView() {
         blurView.contentView.addSubview(alertView)
         
         alertView.backgroundColor = .white
@@ -65,9 +64,12 @@ extension InfoAlert {
         alertView.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func setupLabels() {
+    func setupLabels() {
+        buttonStackView = UIStackView(arrangedSubviews: [okButton, cancelButton])
+        
         alertView.addSubview(textLabel)
         alertView.addSubview(titleLabel)
+        alertView.addSubview(buttonStackView!)
         
         titleLabel.font = UIFont(name: "Helvetica", size: 25)
         titleLabel.text = titleText
@@ -79,11 +81,16 @@ extension InfoAlert {
         textLabel.numberOfLines = 0
         textLabel.textAlignment = .center
         
+        buttonStackView?.axis = .horizontal
+        buttonStackView?.spacing = 10
+        buttonStackView?.distribution = .fillEqually
+        
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView?.translatesAutoresizingMaskIntoConstraints = false
     }
     
-    private func setupConstraints() {
+    func setupConstraints() {
         NSLayoutConstraint.activate([
             blurView.topAnchor.constraint(equalTo: view.topAnchor),
             blurView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -101,29 +108,18 @@ extension InfoAlert {
             
             textLabel.trailingAnchor.constraint(equalTo: alertView.trailingAnchor, constant: -10),
             textLabel.leadingAnchor.constraint(equalTo: alertView.leadingAnchor, constant: 10),
-            textLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20)
-        ])
-        
-        let stackView = UIStackView(arrangedSubviews: [okButton, cancelButton])
-        stackView.axis = .horizontal
-        stackView.spacing = 10
-        stackView.distribution = .fillEqually
-        
-        self.alertView.addSubview(stackView)
-        
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            stackView.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -20),
-            stackView.leadingAnchor.constraint(equalTo: alertView.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: alertView.trailingAnchor, constant: -20)
+            textLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            
+            buttonStackView!.bottomAnchor.constraint(equalTo: alertView.bottomAnchor, constant: -20),
+            buttonStackView!.leadingAnchor.constraint(equalTo: alertView.leadingAnchor, constant: 20),
+            buttonStackView!.trailingAnchor.constraint(equalTo: alertView.trailingAnchor, constant: -20)
         ])
     }
 }
 
 //MARK: - Setup targets
-extension InfoAlert {
-    private func addGestures() {
+private extension InfoAlert {
+    func addGestures() {
         let tapViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         view.addGestureRecognizer(tapViewGesture)
         
@@ -131,7 +127,7 @@ extension InfoAlert {
         alertView.addGestureRecognizer(tapAlertViewGesture)
     }
     
-    private func addTargetToButtons() {
+    func addTargetToButtons() {
         okButton.addTarget(self,
                            action: #selector(okButtonTapped),
                            for: .touchUpInside)
@@ -143,7 +139,7 @@ extension InfoAlert {
         dismissController()
     }
     
-    @objc private func dismissController() {
+    @objc func dismissController() {
         dismiss(animated: true, completion: nil)
     }
     
