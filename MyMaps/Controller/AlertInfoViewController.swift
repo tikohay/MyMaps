@@ -15,11 +15,11 @@ class InfoAlert: UIViewController {
     private let titleLabel = UILabel()
     private let textLabel = UILabel()
     private let okButton = ExtendedButton(title: "Ok",
-                                  backgroundColor: .blue,
-                                  titleColor: .white)
+                                  backgroundColor: Colors.mainBlueColor,
+                                  titleColor: Colors.whiteColor)
     private let cancelButton = ExtendedButton(title: "cancel",
                                       backgroundColor: .red,
-                                      titleColor: .white)
+                                      titleColor: Colors.whiteColor)
     private var buttonStackView: UIStackView?
     
     private var titleText: String?
@@ -59,7 +59,7 @@ private extension InfoAlert {
     func setupAlertView() {
         blurView.contentView.addSubview(alertView)
         
-        alertView.backgroundColor = .white
+        alertView.backgroundColor = Colors.whiteColor
         alertView.layer.cornerRadius = 30
         alertView.translatesAutoresizingMaskIntoConstraints = false
     }

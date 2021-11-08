@@ -23,6 +23,7 @@
 		3CBD4D0F273297A600151A9A /* MapStyleJson.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4D0E273297A600151A9A /* MapStyleJson.swift */; };
 		3CBD4D112733CB8D00151A9A /* MapTypeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4D102733CB8D00151A9A /* MapTypeViewController.swift */; };
 		3CBD4D1327340B0C00151A9A /* MapTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */; };
+		3CC93A502739076400196091 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CC93A4F2739076400196091 /* Colors.swift */; };
 		4414E30ABCBEACD4E13C0642 /* Pods_MyMapsTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3A190AEEEB877B0503C18013 /* Pods_MyMapsTests.framework */; };
 		DFFA7C9C160D4E3811197218 /* Pods_MyMaps.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7568844FB9716E38BD4D67EE /* Pods_MyMaps.framework */; };
 /* End PBXBuildFile section */
@@ -69,6 +70,7 @@
 		3CBD4D0E273297A600151A9A /* MapStyleJson.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapStyleJson.swift; sourceTree = "<group>"; };
 		3CBD4D102733CB8D00151A9A /* MapTypeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTypeViewController.swift; sourceTree = "<group>"; };
 		3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapTypeEnum.swift; sourceTree = "<group>"; };
+		3CC93A4F2739076400196091 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		5136A37CB39AF2940A1FCA3F /* Pods-MyMapsTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMapsTests.release.xcconfig"; path = "Target Support Files/Pods-MyMapsTests/Pods-MyMapsTests.release.xcconfig"; sourceTree = "<group>"; };
 		624BFA0C63BA032A8C9FE067 /* Pods-MyMaps-MyMapsUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyMaps-MyMapsUITests.debug.xcconfig"; path = "Target Support Files/Pods-MyMaps-MyMapsUITests/Pods-MyMaps-MyMapsUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		7568844FB9716E38BD4D67EE /* Pods_MyMaps.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyMaps.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,9 +169,10 @@
 		3CBD4D0827327A1900151A9A /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3CC93A4E2739068000196091 /* Realm */,
 				3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */,
-				3C0A0D8A2737C2F4006C1B98 /* LocationRealm.swift */,
 				3CBD4D0E273297A600151A9A /* MapStyleJson.swift */,
+				3CC93A4F2739076400196091 /* Colors.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -200,6 +203,14 @@
 				3CBD4CE62732760600151A9A /* Info.plist */,
 			);
 			path = "Supporting files";
+			sourceTree = "<group>";
+		};
+		3CC93A4E2739068000196091 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				3C0A0D8A2737C2F4006C1B98 /* LocationRealm.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 		5516A86DB72488080E3EAF50 /* Pods */ = {
@@ -500,6 +511,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3CBD4D0F273297A600151A9A /* MapStyleJson.swift in Sources */,
+				3CC93A502739076400196091 /* Colors.swift in Sources */,
 				3CBD4D112733CB8D00151A9A /* MapTypeViewController.swift in Sources */,
 				3CBD4CDD2732760400151A9A /* MapViewController.swift in Sources */,
 				3CBD4D0D273290DC00151A9A /* UIColor + Extensions.swift in Sources */,

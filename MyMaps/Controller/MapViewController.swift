@@ -18,8 +18,8 @@ class MapViewController: UIViewController {
     private let myPositionButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "mappin.and.ellipse"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
@@ -28,8 +28,8 @@ class MapViewController: UIViewController {
     private let addMarkerButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "mappin"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
@@ -38,8 +38,8 @@ class MapViewController: UIViewController {
     private let updateLocationButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "figure.walk"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
@@ -48,8 +48,8 @@ class MapViewController: UIViewController {
     private let requestLocationButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "location"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
@@ -58,8 +58,8 @@ class MapViewController: UIViewController {
     private let mapTypeButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "map"), for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.layer.cornerRadius = 5
         return button
@@ -68,8 +68,8 @@ class MapViewController: UIViewController {
     private let showLastPathButton: UIButton = {
         let button = UIButton()
         button.setTitle("show the last path", for: .normal)
-        button.tintColor = .white
-        button.backgroundColor = .init(rgb: 0x0057e7)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -94,7 +94,7 @@ class MapViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = Colors.whiteColor
         setupViews()
         configureMap()
         addTargetToButton()

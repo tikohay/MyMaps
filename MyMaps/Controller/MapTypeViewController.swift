@@ -24,7 +24,7 @@ class MapTypeViewController: UIViewController {
         var buttons: [UIButton] = []
         for i in 0...3 {
             let button = UIButton()
-            button.setTitleColor(.white, for: .normal)
+            button.setTitleColor(Colors.whiteColor, for: .normal)
             button.titleLabel?.textAlignment = .left
             button.layer.cornerRadius = 5
             button.addTarget(self, action: #selector(typeButtonTapped), for: .touchUpInside)
