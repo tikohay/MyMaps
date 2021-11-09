@@ -227,7 +227,7 @@ private extension MapViewController {
     
     @objc func showLastPathButtonTapped() {
         if isUpdatedLocation {
-            let toVC = InfoAlert(title: "Need to stop tracking", text: "Stop tracking ?")
+            let toVC = AlertInfoViewController(title: "Need to stop tracking", text: "Stop tracking ?")
             toVC.modalPresentationStyle = .overCurrentContext
             toVC.modalTransitionStyle = .crossDissolve
             toVC.onOkButtonTapped = {
@@ -307,7 +307,6 @@ private extension MapViewController {
 }
 
 extension MapViewController: GMSMapViewDelegate {
-    
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if let manualMarker = manualMarker {
             manualMarker.position = coordinate

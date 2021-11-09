@@ -7,7 +7,8 @@
 
 import UIKit
 
-class InfoAlert: UIViewController {
+class AlertInfoViewController: UIViewController {
+    
     var onOkButtonTapped: (() -> ())?
     
     private var blurView = UIVisualEffectView()
@@ -25,10 +26,16 @@ class InfoAlert: UIViewController {
     private var titleText: String?
     private var descriptionText: String?
     
-    convenience init(title: String, text: String) {
+    convenience init(title: String, text: String, isOnRegistration: Bool? = false) {
         self.init()
         self.titleText = title
         self.descriptionText = text
+        
+        if isOnRegistration == true {
+            okButton.isHidden = true
+            cancelButton.setTitle("ok", for: .normal)
+            cancelButton.backgroundColor = Colors.mainBlueColor
+        }
     }
     
     override func viewDidLoad() {
@@ -40,7 +47,7 @@ class InfoAlert: UIViewController {
 }
 
 //MARK: - Setup views
-private extension InfoAlert {
+private extension AlertInfoViewController {
     func setupViews() {
         setupBlurView()
         setupAlertView()
@@ -118,7 +125,7 @@ private extension InfoAlert {
 }
 
 //MARK: - Setup targets
-private extension InfoAlert {
+private extension AlertInfoViewController {
     func addGestures() {
         let tapViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         view.addGestureRecognizer(tapViewGesture)
