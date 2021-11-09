@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 class MainViewController: UIViewController {
     
@@ -36,6 +37,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        addTargets()
     }
 }
 
@@ -76,5 +78,29 @@ private extension MainViewController {
         ])
         
         travelAnimation.isHidden = true
+    }
+}
+
+
+//MARK: - Add targets
+private extension MainViewController {
+    func addTargets() {
+        showMapButton.addTarget(self,
+                                action: #selector(showMapButtonTapped),
+                                for: .touchUpInside)
+        logoutButton.addTarget(self,
+                               action: #selector(logoutButtonTapped),
+                               for: .touchUpInside)
+    }
+    
+    @objc func showMapButtonTapped() {
+        let toVC = MapViewController()
+        toVC.modalTransitionStyle = .flipHorizontal
+        toVC.modalPresentationStyle = .fullScreen
+        present(toVC, animated: true, completion: nil)
+    }
+    
+    @objc func logoutButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }

@@ -49,6 +49,7 @@ class LoginViewController: UIViewController {
         addTapGestureRecognizer()
         setupViews()
         addTargetToButtons()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -198,7 +199,8 @@ extension LoginViewController {
     }
     
     @objc private func loginButtonTapped() {
-        
+        let toVC = MainViewController()
+        navigationController?.pushViewController(toVC, animated: true)
     }
     
     private func startActivityViewAnimating() {
