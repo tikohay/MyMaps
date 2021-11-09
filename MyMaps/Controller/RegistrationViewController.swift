@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class RegistrationViewController: UIViewController {
     
@@ -38,6 +39,8 @@ class RegistrationViewController: UIViewController {
     
     private var isKeyboardShown = false
     
+    private let userDataRealm = UserDataRealm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureRecognizer()
@@ -48,6 +51,7 @@ class RegistrationViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         addKeyboardObservers()
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -170,14 +174,18 @@ extension RegistrationViewController {
     
     @objc func registrationButtonTapped() {
         guard
-//            let username = usernameTextField.textfield.text,
-//              let password = passwordTextField.textfield.text,
+            let username = usernameTextField.textfield.text,
+              let password = passwordTextField.textfield.text,
               usernameTextField.textfield.text != "",
               passwordTextField.textfield.text != ""
         else {
-            self.presentGBShopInfoAlert(title: "Warning",
+            self.presentAlertInfo(title: "Warning",
                                         text: "The parameters are entered incorrectly")
             return
+        }
+        
+        userDataRealm.addUserData(login: username, password: password) {
+            print(username, password)
         }
     }
     
@@ -185,7 +193,7 @@ extension RegistrationViewController {
         
     }
     
-    private func presentGBShopInfoAlert(title: String, text: String) {
+    private func presentAlertInfo(title: String, text: String) {
         DispatchQueue.main.async {
             let toVC = AlertInfoViewController(title: title,
                                                text: text,

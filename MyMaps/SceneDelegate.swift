@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         
-//        let rootVC = MainViewController()
+//        let rootVC = LoginViewController()
 //        let navigationVC = UINavigationController(rootViewController: rootVC)
         
         window?.rootViewController = Launch()

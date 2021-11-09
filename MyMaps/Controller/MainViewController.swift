@@ -38,6 +38,8 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         addTargets()
+        
+        UserDefaults.standard.set(true, forKey: "isLogin")
     }
 }
 
@@ -45,6 +47,7 @@ class MainViewController: UIViewController {
 private extension MainViewController {
     func setupViews() {
         view.backgroundColor = Colors.whiteColor
+        navigationController?.setNavigationBarHidden(true, animated: false)
         setupMainForm()
     }
     
@@ -101,6 +104,10 @@ private extension MainViewController {
     }
     
     @objc func logoutButtonTapped() {
-        navigationController?.popViewController(animated: true)
+        UserDefaults.standard.set(false, forKey: "isLogin")
+        let toVC = Launch()
+        toVC.modalTransitionStyle = .crossDissolve
+        toVC.modalPresentationStyle = .fullScreen
+        present(toVC, animated: true, completion: nil)
     }
 }

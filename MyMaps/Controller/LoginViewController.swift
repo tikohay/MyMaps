@@ -44,6 +44,8 @@ class LoginViewController: UIViewController {
     
     private var isKeyboardShown = false
     
+    private let userDataRealm = UserDataRealm()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addTapGestureRecognizer()
@@ -61,7 +63,6 @@ class LoginViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         removeKeyboardObservers()
-        navigationController?.setNavigationBarHidden(false, animated: false)
     }
 }
 
@@ -203,6 +204,11 @@ extension LoginViewController {
         navigationController?.pushViewController(toVC, animated: true)
     }
     
+    @objc private func registrationButtonTapped() {
+        let toVC = RegistrationViewController()
+        navigationController?.pushViewController(toVC, animated: true)
+    }
+    
     private func startActivityViewAnimating() {
         DispatchQueue.main.async {
             self.activityView.isHidden = false
@@ -215,11 +221,6 @@ extension LoginViewController {
             self.activityView.isHidden = true
             self.activityView.stopAnimating()
         }
-    }
-    
-    @objc private func registrationButtonTapped() {
-        let toVC = RegistrationViewController()
-        navigationController?.pushViewController(toVC, animated: true)
     }
 }
 
