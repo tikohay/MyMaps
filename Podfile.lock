@@ -4,6 +4,7 @@ PODS:
   - GoogleMaps/Base (5.2.0)
   - GoogleMaps/Maps (5.2.0):
     - GoogleMaps/Base
+  - lottie-ios (3.2.3)
   - Realm (10.19.0):
     - Realm/Headers (= 10.19.0)
   - Realm/Headers (10.19.0)
@@ -12,19 +13,22 @@ PODS:
 
 DEPENDENCIES:
   - GoogleMaps
+  - lottie-ios
   - RealmSwift
 
 SPEC REPOS:
   trunk:
     - GoogleMaps
+    - lottie-ios
     - Realm
     - RealmSwift
 
 SPEC CHECKSUMS:
   GoogleMaps: 025272d5876d3b32604e5c080dc25eaf68764693
+  lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   Realm: 869ab2a7e3bdfa6bf06d8723251539f504e6f602
   RealmSwift: f1f51c4a02fe826e5cea623b5441992f06bdc942
 
-PODFILE CHECKSUM: 515989092eb627c348fced3b6681694fbb0d0bbc
+PODFILE CHECKSUM: f21b9b2e2527bb628f11bdf3245943d0072677db
 
 COCOAPODS: 1.11.2

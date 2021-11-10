@@ -7,6 +7,7 @@
 
 import UIKit
 import SwiftUI
+import Lottie
 
 class MainViewController: UIViewController {
     
@@ -18,6 +19,7 @@ class MainViewController: UIViewController {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
+        label.text = "Hello, "
         label.tintColor = Colors.mainBlueColor
         label.textAlignment = .left
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -25,10 +27,11 @@ class MainViewController: UIViewController {
         return label
     }()
     
-    private let travelAnimation: UIView = {
-        let view = UIView()
-        view.backgroundColor = .red
-        view.translatesAutoresizingMaskIntoConstraints  = false
+    private let travelAnimation: AnimationView = {
+        let view = AnimationView()
+        let path = Bundle.main.path(forResource: "Animation", ofType: "json") ?? ""
+        view.animation = Animation.filepath(path)
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -84,8 +87,6 @@ private extension MainViewController {
             stackView.widthAnchor.constraint(equalToConstant: 100),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-        
-        travelAnimation.isHidden = true
     }
 }
 
@@ -102,10 +103,14 @@ private extension MainViewController {
     }
     
     @objc func showMapButtonTapped() {
-        let toVC = MapViewController()
-        toVC.modalTransitionStyle = .flipHorizontal
-        toVC.modalPresentationStyle = .fullScreen
-        present(toVC, animated: true, completion: nil)
+        travelAnimation.play(completion: nil)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let toVC = MapViewController()
+            toVC.modalTransitionStyle = .flipHorizontal
+            toVC.modalPresentationStyle = .fullScreen
+            self.travelAnimation.stop()
+            self.present(toVC, animated: true, completion: nil)
+        }
     }
     
     @objc func logoutButtonTapped() {

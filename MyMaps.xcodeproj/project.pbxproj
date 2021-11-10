@@ -17,6 +17,7 @@
 		3C80FF0A273A9FB600D0BEFC /* Launch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF09273A9FB600D0BEFC /* Launch.swift */; };
 		3C80FF0C273AABD600D0BEFC /* UserDataRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF0B273AABD600D0BEFC /* UserDataRealm.swift */; };
 		3C8D22698FBEFF56BB6A916B /* Pods_MyMaps_MyMapsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C035E1FFE0CAD2A4912CC5C /* Pods_MyMaps_MyMapsUITests.framework */; };
+		3CA63E6D273BD4D70083DB2B /* Animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 3CA63E6C273BD4D70083DB2B /* Animation.json */; };
 		3CBD4CD92732760400151A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CD82732760400151A9A /* AppDelegate.swift */; };
 		3CBD4CDB2732760400151A9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CDA2732760400151A9A /* SceneDelegate.swift */; };
 		3CBD4CDD2732760400151A9A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CDC2732760400151A9A /* MapViewController.swift */; };
@@ -66,6 +67,7 @@
 		3C80FF07273A7D1D00D0BEFC /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		3C80FF09273A9FB600D0BEFC /* Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch.swift; sourceTree = "<group>"; };
 		3C80FF0B273AABD600D0BEFC /* UserDataRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataRealm.swift; sourceTree = "<group>"; };
+		3CA63E6C273BD4D70083DB2B /* Animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Animation.json; sourceTree = "<group>"; };
 		3CBD4CD52732760400151A9A /* MyMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CBD4CD82732760400151A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CBD4CDA2732760400151A9A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 		3CBD4D0B27327A8700151A9A /* Supporting files */ = {
 			isa = PBXGroup;
 			children = (
+				3CA63E6C273BD4D70083DB2B /* Animation.json */,
 				3CBD4CE12732760600151A9A /* Assets.xcassets */,
 				3CBD4CE32732760600151A9A /* LaunchScreen.storyboard */,
 				3CBD4CE62732760600151A9A /* Info.plist */,
@@ -365,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CA63E6D273BD4D70083DB2B /* Animation.json in Resources */,
 				3CBD4CE52732760600151A9A /* LaunchScreen.storyboard in Resources */,
 				3CBD4CE22732760600151A9A /* Assets.xcassets in Resources */,
 			);
