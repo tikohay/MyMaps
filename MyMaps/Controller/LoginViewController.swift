@@ -40,7 +40,6 @@ class LoginViewController: UIViewController {
     private let passwordStandardTextField = MyMapsStandardTextField(labelText: "Password",
                                                                     isSecured: true,
                                                                     accessibilityIdentifier: "passwordTF")
-    private let activityView = UIActivityIndicatorView()
     
     private var isKeyboardShown = false
     
@@ -67,14 +66,13 @@ class LoginViewController: UIViewController {
 }
 
 // MARK: - Setup views
-extension LoginViewController {
-    private func setupViews() {
+private extension LoginViewController {
+    func setupViews() {
         setupScrollView()
         setupAuthForm()
-        setupActivityView()
     }
     
-    private func setupScrollView() {
+    func setupScrollView() {
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -84,7 +82,7 @@ extension LoginViewController {
         ])
     }
     
-    private func setupAuthForm() {
+    func setupAuthForm() {
         let loginFormStackView = UIStackView(arrangedSubviews: [loginStandardTextField,
                                                                 passwordStandardTextField])
         loginFormStackView.axis = .vertical
@@ -115,14 +113,7 @@ extension LoginViewController {
         ])
     }
     
-    private func setupActivityView() {
-        activityView.center = view.center
-        activityView.color = Colors.mainBlueColor
-        activityView.style = .large
-        view.addSubview(activityView)
-    }
-    
-    private func presentAlertInfo(title: String, text: String, withOneOkButton: Bool) {
+    func presentAlertInfo(title: String, text: String, withOneOkButton: Bool) {
         DispatchQueue.main.async {
             let toVC = AlertInfoViewController(title: title,
                                                text: text,
@@ -135,14 +126,14 @@ extension LoginViewController {
 }
 
 // MARK: - Setup observers and gestures recognizer
-extension LoginViewController {
-    private func addTapGestureRecognizer() {
+private extension LoginViewController {
+    func addTapGestureRecognizer() {
         let hideKeyboardGesture = UITapGestureRecognizer(target: self,
                                                          action: #selector(hideKeyboard))
         scrollView.addGestureRecognizer(hideKeyboardGesture)
     }
     
-    private func addKeyboardObservers() {
+    func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillBeShown),
                                                name: UIResponder.keyboardWillShowNotification,
@@ -154,7 +145,7 @@ extension LoginViewController {
                                                object: nil)
     }
     
-    private func removeKeyboardObservers() {
+    func removeKeyboardObservers() {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIResponder.keyboardWillShowNotification,
                                                   object: nil)
@@ -164,7 +155,7 @@ extension LoginViewController {
                                                   object: nil)
     }
     
-    @objc private func keyboardWillBeShown(notification: Notification) {
+    @objc func keyboardWillBeShown(notification: Notification) {
         guard !isKeyboardShown else { return }
         let info = notification.userInfo as NSDictionary?
         let keyboardSize = (info?.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as? NSValue)?.cgRectValue.size
@@ -175,7 +166,7 @@ extension LoginViewController {
         isKeyboardShown = true
     }
     
-    @objc private func keyboardWillBeHiden() {
+    @objc func keyboardWillBeHiden() {
         guard isKeyboardShown else { return }
         
         let contentInsets = UIEdgeInsets.zero
@@ -184,14 +175,14 @@ extension LoginViewController {
         isKeyboardShown = false
     }
     
-    @objc private func hideKeyboard() {
+    @objc func hideKeyboard() {
         scrollView.endEditing(true)
     }
 }
 
 // MARK: - Setup targets
-extension LoginViewController {
-    private func addTargetToButtons() {
+private extension LoginViewController {
+    func addTargetToButtons() {
         loginButton.addTarget(self,
                               action: #selector(loginButtonTapped),
                               for: .touchUpInside)
@@ -200,7 +191,7 @@ extension LoginViewController {
                                      for: .touchUpInside)
     }
     
-    @objc private func loginButtonTapped() {
+    @objc func loginButtonTapped() {
         guard
             let login = loginStandardTextField.textfield.text,
             let password = passwordStandardTextField.textfield.text,
@@ -222,6 +213,7 @@ extension LoginViewController {
             }
             if password == userData.password {
                 let toVC = MainViewController()
+                toVC.name = login
                 navigationController?.pushViewController(toVC, animated: true)
             } else {
                 presentAlertInfo(title: "Warning",
@@ -231,23 +223,9 @@ extension LoginViewController {
         }
     }
     
-    @objc private func registrationButtonTapped() {
+    @objc func registrationButtonTapped() {
         let toVC = RegistrationViewController()
         navigationController?.pushViewController(toVC, animated: true)
-    }
-    
-    private func startActivityViewAnimating() {
-        DispatchQueue.main.async {
-            self.activityView.isHidden = false
-            self.activityView.startAnimating()
-        }
-    }
-    
-    private func stopActivityAnimating() {
-        DispatchQueue.main.async {
-            self.activityView.isHidden = true
-            self.activityView.stopAnimating()
-        }
     }
 }
 

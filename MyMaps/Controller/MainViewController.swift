@@ -10,9 +10,14 @@ import SwiftUI
 
 class MainViewController: UIViewController {
     
+    var name: String = "" {
+        didSet {
+            titleLabel.text = "Hello, \(name)"
+        }
+    }
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello, Nicolas"
         label.tintColor = Colors.mainBlueColor
         label.textAlignment = .left
         label.font = UIFont.boldSystemFont(ofSize: 20)

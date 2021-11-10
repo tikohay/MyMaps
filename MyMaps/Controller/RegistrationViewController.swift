@@ -29,7 +29,6 @@ class RegistrationViewController: UIViewController {
                                               backgroundColor: Colors.mainBlueColor,
                                               titleColor: .white,
                                               accessibilityIdentifier: "registrationButton")
-    private let activityView = UIActivityIndicatorView()
     
     private let usernameTextField = MyMapsStandardTextField(labelText: "Name",
                                                             accessibilityIdentifier: "usernameTextField")
@@ -61,14 +60,13 @@ class RegistrationViewController: UIViewController {
 }
 
 //MARK: - Setup views
-extension RegistrationViewController {
-    private func setupViews() {
+private extension RegistrationViewController {
+    func setupViews() {
         setupScrollView()
         setupEditorForm()
-        setupActivityView()
     }
     
-    private func setupScrollView() {
+    func setupScrollView() {
         view.addSubview(scrollView)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -78,7 +76,7 @@ extension RegistrationViewController {
         ])
     }
     
-    private func setupEditorForm() {
+    func setupEditorForm() {
         let stackView = UIStackView(arrangedSubviews: [usernameTextField,
                                                        passwordTextField])
         stackView.axis = .vertical
@@ -106,18 +104,11 @@ extension RegistrationViewController {
             registrationButton.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -20)
         ])
     }
-    
-    private func setupActivityView() {
-        activityView.center = view.center
-        activityView.color = Colors.mainBlueColor
-        activityView.style = .large
-        view.addSubview(activityView)
-    }
 }
 
 //MARK: - Setup observers and gestures recognizer
-extension RegistrationViewController {
-    private func addKeyboardObservers() {
+private extension RegistrationViewController {
+    func addKeyboardObservers() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(keyboardWillBeShown),
                                                name: UIResponder.keyboardWillShowNotification,
@@ -129,7 +120,7 @@ extension RegistrationViewController {
                                                object: nil)
     }
     
-    private func removeKeyboardObservers() {
+    func removeKeyboardObservers() {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIResponder.keyboardWillShowNotification,
                                                   object: nil)
@@ -139,12 +130,12 @@ extension RegistrationViewController {
                                                   object: nil)
     }
     
-    private func addTapGestureRecognizer() {
+    func addTapGestureRecognizer() {
         let hideKeyboardGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         scrollView.addGestureRecognizer(hideKeyboardGesture)
     }
     
-    @objc private func keyboardWillBeShown(notification: Notification) {
+    @objc func keyboardWillBeShown(notification: Notification) {
         guard !isKeyboardShown else { return }
         let info = notification.userInfo as NSDictionary?
         let keyboardSize = (info?.value(forKey: UIResponder.keyboardFrameEndUserInfoKey) as? NSValue)?.cgRectValue.size
@@ -154,21 +145,21 @@ extension RegistrationViewController {
         isKeyboardShown = true
     }
     
-    @objc private func keyboardWillBeHiden() {
+    @objc func keyboardWillBeHiden() {
         guard isKeyboardShown else { return }
         let contentInsets = UIEdgeInsets.zero
         scrollView.contentInset = contentInsets
         isKeyboardShown = false
     }
     
-    @objc private func hideKeyboard() {
+    @objc func hideKeyboard() {
         scrollView.endEditing(true)
     }
 }
 
 // MARK: - Setup targets
-extension RegistrationViewController {
-    private func addTargetToButtons() {
+private extension RegistrationViewController {
+    func addTargetToButtons() {
         registrationButton.addTarget(self, action: #selector(registrationButtonTapped), for: .touchUpInside)
     }
     
@@ -189,11 +180,7 @@ extension RegistrationViewController {
         }
     }
     
-    private func sendRegistrationData() {
-        
-    }
-    
-    private func presentAlertInfo(title: String, text: String) {
+    func presentAlertInfo(title: String, text: String) {
         DispatchQueue.main.async {
             let toVC = AlertInfoViewController(title: title,
                                                text: text,
@@ -202,24 +189,6 @@ extension RegistrationViewController {
             toVC.modalTransitionStyle = .crossDissolve
             self.present(toVC, animated: true, completion: nil)
         }
-    }
-    
-    private func startActivityViewAnimating() {
-        DispatchQueue.main.async {
-            self.activityView.isHidden = false
-            self.activityView.startAnimating()
-        }
-    }
-    
-    private func stopActivityAnimating() {
-        DispatchQueue.main.async {
-            self.activityView.isHidden = true
-            self.activityView.stopAnimating()
-        }
-    }
-    
-    @objc func dismissController() {
-        dismiss(animated: true, completion: nil)
     }
 }
 
