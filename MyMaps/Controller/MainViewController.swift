@@ -13,13 +13,12 @@ class MainViewController: UIViewController {
     
     var name: String = "" {
         didSet {
-            titleLabel.text = "Hello, \(name)"
+            UserDefaults.standard.set(name, forKey: "name")
         }
     }
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Hello, "
         label.tintColor = Colors.mainBlueColor
         label.textAlignment = .left
         label.font = UIFont.boldSystemFont(ofSize: 20)
@@ -56,10 +55,15 @@ private extension MainViewController {
     func setupViews() {
         view.backgroundColor = Colors.whiteColor
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
         setupMainForm()
     }
     
     func setupMainForm() {
+        if let name = UserDefaults.standard.string(forKey: "name") {
+            titleLabel.text = "Hello, \(name)"
+        }
+        
         let stackView = UIStackView(arrangedSubviews: [showMapButton,
                                                        logoutButton])
         stackView.axis = .vertical
