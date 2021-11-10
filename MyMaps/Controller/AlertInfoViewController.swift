@@ -26,12 +26,12 @@ class AlertInfoViewController: UIViewController {
     private var titleText: String?
     private var descriptionText: String?
     
-    convenience init(title: String, text: String, isOnRegistration: Bool? = false) {
+    convenience init(title: String, text: String, withOneOkButton: Bool? = false) {
         self.init()
         self.titleText = title
         self.descriptionText = text
         
-        if isOnRegistration == true {
+        if withOneOkButton == true {
             okButton.isHidden = true
             cancelButton.setTitle("ok", for: .normal)
             cancelButton.backgroundColor = Colors.mainBlueColor

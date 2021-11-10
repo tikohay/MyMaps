@@ -122,15 +122,16 @@ extension LoginViewController {
         view.addSubview(activityView)
     }
     
-//    private func presentGBShopInfoAlert() {
-//        DispatchQueue.main.async {
-//            let toVC = GBShopInfoAlert(title: "Warning",
-//                                       text: "Login or password is wrong")
-//            toVC.modalPresentationStyle = .overCurrentContext
-//            toVC.modalTransitionStyle = .crossDissolve
-//            self.present(toVC, animated: true, completion: nil)
-//        }
-//    }
+    private func presentAlertInfo(title: String, text: String, withOneOkButton: Bool) {
+        DispatchQueue.main.async {
+            let toVC = AlertInfoViewController(title: title,
+                                               text: text,
+                                               withOneOkButton: withOneOkButton)
+            toVC.modalPresentationStyle = .overCurrentContext
+            toVC.modalTransitionStyle = .crossDissolve
+            self.present(toVC, animated: true, completion: nil)
+        }
+    }
 }
 
 // MARK: - Setup observers and gestures recognizer
@@ -200,8 +201,34 @@ extension LoginViewController {
     }
     
     @objc private func loginButtonTapped() {
-        let toVC = MainViewController()
-        navigationController?.pushViewController(toVC, animated: true)
+        guard
+            let login = loginStandardTextField.textfield.text,
+            let password = passwordStandardTextField.textfield.text,
+            loginStandardTextField.textfield.text != "",
+            passwordStandardTextField.textfield.text != ""
+        else { presentAlertInfo(title: "Warning",
+                                text: "Login or password is wrong",
+                                withOneOkButton: true)
+            return
+        }
+        
+        userDataRealm.getSpecificUserData(for: login) { userData in
+            guard
+                let userData = userData
+            else { presentAlertInfo(title: "Warning",
+                                    text: "Login or password is wrong",
+                                    withOneOkButton: true)
+                return
+            }
+            if password == userData.password {
+                let toVC = MainViewController()
+                navigationController?.pushViewController(toVC, animated: true)
+            } else {
+                presentAlertInfo(title: "Warning",
+                                        text: "Login or password is wrong",
+                                        withOneOkButton: true)
+            }
+        }
     }
     
     @objc private func registrationButtonTapped() {

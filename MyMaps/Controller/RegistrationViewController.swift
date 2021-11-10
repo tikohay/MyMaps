@@ -25,7 +25,7 @@ class RegistrationViewController: UIViewController {
         return label
     }()
     
-    private let registrationButton = ExtendedButton(title: "Registration",
+    private let registrationButton = ExtendedButton(title: "Register",
                                               backgroundColor: Colors.mainBlueColor,
                                               titleColor: .white,
                                               accessibilityIdentifier: "registrationButton")
@@ -185,7 +185,7 @@ extension RegistrationViewController {
         }
         
         userDataRealm.addUserData(login: username, password: password) {
-            print(username, password)
+            navigationController?.popViewController(animated: true)
         }
     }
     
@@ -197,7 +197,7 @@ extension RegistrationViewController {
         DispatchQueue.main.async {
             let toVC = AlertInfoViewController(title: title,
                                                text: text,
-                                               isOnRegistration: true)
+                                               withOneOkButton: true)
             toVC.modalPresentationStyle = .overCurrentContext
             toVC.modalTransitionStyle = .crossDissolve
             self.present(toVC, animated: true, completion: nil)
