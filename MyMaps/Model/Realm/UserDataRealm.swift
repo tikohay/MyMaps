@@ -54,15 +54,4 @@ class UserDataRealm: Object {
             print(error)
         }
     }
-//
-//    func getSpecificUserDataTest(for primaryKey: String, completionHandler: (UserDataRealm?) -> ()) {
-//        var specificUserData: UserDataRealm?
-//        do {
-//            let realm = try Realm()
-//            specificUserData = realm.object(ofType: UserDataRealm.self, forPrimaryKey: primaryKey)
-//            completionHandler(specificUserData)
-//        } catch {
-//            print(error)
-//        }
-//    }
 }
