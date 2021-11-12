@@ -17,7 +17,7 @@ class Launch: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        
+
         if UserDefaults.standard.bool(forKey: "isLogin") {
             let toVC = MainViewController()
             toVC.modalTransitionStyle = .crossDissolve
