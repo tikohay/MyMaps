@@ -9,6 +9,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import RealmSwift
+import RxSwift
 
 class MapViewController: UIViewController {
     
@@ -94,6 +95,8 @@ class MapViewController: UIViewController {
     private var route: GMSPolyline?
     private var routePath: GMSMutablePath?
     private var locationManager = LocationManager.instanse
+    
+    private let disposeBag = DisposeBag()
     
     private var allLocations:[CLLocationCoordinate2D] = []
     
@@ -219,7 +222,6 @@ private extension MapViewController {
             routePath = GMSMutablePath()
             route?.map = mapView
             
-//            locationManager.startUpdatingLocation()
             locationManager.startUpdatingLocation()
             updateLocationButton.setImage(UIImage(systemName: "figure.stand"), for: .normal)
         } else {
@@ -286,7 +288,7 @@ private extension MapViewController {
             self.geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
                 print(places?.first ?? "couldn't find place")
             })
-        }
+        }.disposed(by: disposeBag)
     }
     
     func configureMapCoordinate() {
