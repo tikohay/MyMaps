@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import GoogleMaps
 
-class LocationRealm: Object, Decodable {
+class LocationRealm: Object {
     @objc dynamic var latitude = 0.0
     @objc dynamic var longitude = 0.0
     

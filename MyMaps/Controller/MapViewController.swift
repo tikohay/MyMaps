@@ -74,6 +74,15 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    private let exitButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("exit", for: .normal)
+        button.tintColor = Colors.whiteColor
+        button.backgroundColor = Colors.mainBlueColor
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private var isAddedMarker = false
     private var isUpdatedLocation = false
     
@@ -135,8 +144,15 @@ private extension MapViewController {
         buttonsStackView.spacing = 1
         buttonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
+        let bottomButtonsStackView = UIStackView(arrangedSubviews: [exitButton, showLastPathButton])
+        bottomButtonsStackView.axis = .horizontal
+        bottomButtonsStackView.distribution = .fillEqually
+        bottomButtonsStackView.spacing = 1
+        bottomButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
+        
         mapView.addSubview(buttonsStackView)
-        mapView.addSubview(showLastPathButton)
+//        mapView.addSubview(showLastPathButton)
+        mapView.addSubview(bottomButtonsStackView)
         
         NSLayoutConstraint.activate([
             addMarkerButton.heightAnchor.constraint(equalToConstant: 35),
@@ -145,8 +161,10 @@ private extension MapViewController {
             buttonsStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             buttonsStackView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor, constant: -10),
             
-            showLastPathButton.trailingAnchor.constraint(equalTo: mapView.trailingAnchor),
-            showLastPathButton.bottomAnchor.constraint(equalTo: mapView.bottomAnchor)
+            bottomButtonsStackView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor),
+            bottomButtonsStackView.trailingAnchor.constraint(equalTo: mapView.trailingAnchor),
+            bottomButtonsStackView.leadingAnchor.constraint(equalTo: mapView.leadingAnchor),
+            bottomButtonsStackView.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
 }
@@ -172,6 +190,9 @@ private extension MapViewController {
         showLastPathButton.addTarget(self,
                                      action: #selector(showLastPathButtonTapped),
                                      for: .touchUpInside)
+        exitButton.addTarget(self,
+                             action: #selector(exitButtonTapped),
+                             for: .touchUpInside)
     }
     
     @objc func myPositionButtonTapped() {
@@ -227,7 +248,7 @@ private extension MapViewController {
     
     @objc func showLastPathButtonTapped() {
         if isUpdatedLocation {
-            let toVC = InfoAlert(title: "Need to stop tracking", text: "Stop tracking ?")
+            let toVC = AlertInfoViewController(title: "Need to stop tracking", text: "Stop tracking ?")
             toVC.modalPresentationStyle = .overCurrentContext
             toVC.modalTransitionStyle = .crossDissolve
             toVC.onOkButtonTapped = {
@@ -241,6 +262,10 @@ private extension MapViewController {
         } else {
             createPathFromLocations()
         }
+    }
+    
+    @objc func exitButtonTapped() {
+        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -307,7 +332,6 @@ private extension MapViewController {
 }
 
 extension MapViewController: GMSMapViewDelegate {
-    
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if let manualMarker = manualMarker {
             manualMarker.position = coordinate

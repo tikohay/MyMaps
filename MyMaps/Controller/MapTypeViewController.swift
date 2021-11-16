@@ -78,7 +78,6 @@ private extension MapTypeViewController {
 
 //MARK: - Add targets and recognizers
 private extension MapTypeViewController {
-    
     func addRecognizers() {
         let tapViewGesture = UITapGestureRecognizer(target: self, action: #selector(dismissController))
         view.addGestureRecognizer(tapViewGesture)
