@@ -19,11 +19,15 @@ class MyMapsStandardTextField: UIView {
     
     convenience init(labelText: String,
                      isSecured: Bool = false,
-                     accessibilityIdentifier: String? = nil) {
+                     accessibilityIdentifier: String? = nil,
+                     autocorrectionType: UITextAutocorrectionType? = nil) {
         self.init()
         label.text = labelText
         textfield.accessibilityIdentifier = accessibilityIdentifier
         textfield.isSecureTextEntry = isSecured
+        if let autocorrectionType = autocorrectionType {
+            textfield.autocorrectionType = autocorrectionType
+        }
         setupView()
     }
     

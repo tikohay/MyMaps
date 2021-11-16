@@ -10,6 +10,8 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    
+    var visualEffectView = UIVisualEffectView()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
@@ -40,8 +42,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneWillEnterForeground(_ scene: UIScene) {
-        // Called as the scene transitions from the background to the foreground.
-        // Use this method to undo the changes made on entering the background.
+        UIView.animate(withDuration: 0.5) {
+            self.visualEffectView.effect = nil
+        }
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
@@ -49,7 +52,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to save data, release shared resources, and store enough scene-specific state information
         // to restore the scene back to its current state.
     }
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        if !self.visualEffectView.isDescendant(of: self.window!) {
+            self.window?.addSubview(self.visualEffectView)
+        }
+        self.visualEffectView.frame = (self.window?.bounds)!
+        
+        UIView.animate(withDuration: 0.5) {
+            self.visualEffectView.effect = UIBlurEffect(style: .light)
+        }
+    }
 
-
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        UIView.animate(withDuration: 0.5) {
+            self.visualEffectView.effect = nil
+        }
+    }
 }
 

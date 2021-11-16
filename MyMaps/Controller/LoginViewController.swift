@@ -8,6 +8,7 @@
 import UIKit
 
 class LoginViewController: UIViewController {
+    
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.backgroundColor = Colors.whiteColor
@@ -36,10 +37,13 @@ class LoginViewController: UIViewController {
                                                     accessibilityIdentifier: "registrationButton")
     
     private let loginStandardTextField = MyMapsStandardTextField(labelText: "Login",
-                                                                 accessibilityIdentifier: "loginTF")
+                                                                 accessibilityIdentifier: "loginTF",
+                                                                 autocorrectionType: .no)
     private let passwordStandardTextField = MyMapsStandardTextField(labelText: "Password",
                                                                     isSecured: true,
-                                                                    accessibilityIdentifier: "passwordTF")
+                                                                    accessibilityIdentifier: "passwordTF",
+                                                                    autocorrectionType: .no)
+    var visualEffectView = UIVisualEffectView()
     
     private var isKeyboardShown = false
     
@@ -50,7 +54,7 @@ class LoginViewController: UIViewController {
         addTapGestureRecognizer()
         setupViews()
         addTargetToButtons()
-        
+        blurViewWhenActiveResigned()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -153,6 +157,19 @@ private extension LoginViewController {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIResponder.keyboardWillHideNotification,
                                                   object: nil)
+    }
+    
+    func blurViewWhenActiveResigned() {
+        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.view.addSubview(self.visualEffectView)
+            self.visualEffectView.frame = (self.view.bounds)
+            self.visualEffectView.effect = UIBlurEffect(style: .light)
+        }
+        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
+            guard let self = self else { return }
+            self.visualEffectView.effect = nil
+        }
     }
     
     @objc func keyboardWillBeShown(notification: Notification) {
