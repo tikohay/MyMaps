@@ -46,7 +46,6 @@ class LoginViewController: UIViewController {
                                                                     isSecured: true,
                                                                     accessibilityIdentifier: "passwordTF",
                                                                     autocorrectionType: .no)
-    var visualEffectView = UIVisualEffectView()
     
     private var isKeyboardShown = false
     private var isInputFilled = false
@@ -58,7 +57,6 @@ class LoginViewController: UIViewController {
         addTapGestureRecognizer()
         setupViews()
         addTargetToButtons()
-        addBlurViewWhenActiveResigned()
         configureLoginBindings()
     }
     
@@ -162,19 +160,6 @@ private extension LoginViewController {
         NotificationCenter.default.removeObserver(self,
                                                   name: UIResponder.keyboardWillHideNotification,
                                                   object: nil)
-    }
-    
-    func addBlurViewWhenActiveResigned() {
-        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.view.addSubview(self.visualEffectView)
-            self.visualEffectView.frame = (self.view.bounds)
-            self.visualEffectView.effect = UIBlurEffect(style: .light)
-        }
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.visualEffectView.effect = nil
-        }
     }
     
     func configureLoginBindings() {
