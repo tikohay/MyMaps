@@ -217,10 +217,10 @@ private extension LoginViewController {
             return
         }
 
-        userDataRealm.getSpecificUserData(for: login) { userData in
+        userDataRealm.getSpecificUserData(for: login) { [weak self] userData in
             guard
                 let userData = userData
-            else { presentAlertInfo(title: "Warning",
+            else { self?.presentAlertInfo(title: "Warning",
                                     text: "Login or password is wrong",
                                     withOneOkButton: true)
                 return
@@ -230,7 +230,7 @@ private extension LoginViewController {
                 toVC.name = login
                 navigationController?.pushViewController(toVC, animated: true)
             } else {
-                presentAlertInfo(title: "Warning",
+                self?.presentAlertInfo(title: "Warning",
                                         text: "Login or password is wrong",
                                         withOneOkButton: true)
             }
