@@ -41,6 +41,11 @@ class MainViewController: UIViewController {
                                       backgroundColor: .gray,
                                       titleColor: .white)
     
+    private let takeSelfieButton = ExtendedButton(title: "Take selfie",
+                                                  backgroundColor: Colors.whiteColor,
+                                                  titleColor: .black,
+                                                  isShadow: true)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
@@ -65,14 +70,13 @@ private extension MainViewController {
         }
         
         let stackView = UIStackView(arrangedSubviews: [showMapButton,
-                                                       logoutButton])
+                                                       logoutButton,
+                                                       takeSelfieButton])
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.spacing = 30
+        stackView.spacing = 20
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        showMapButton.translatesAutoresizingMaskIntoConstraints = false
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
         
         self.view.addSubview(titleLabel)
         self.view.addSubview(travelAnimation)
@@ -94,7 +98,6 @@ private extension MainViewController {
     }
 }
 
-
 //MARK: - Add targets
 private extension MainViewController {
     func addTargets() {
@@ -104,6 +107,9 @@ private extension MainViewController {
         logoutButton.addTarget(self,
                                action: #selector(logoutButtonTapped),
                                for: .touchUpInside)
+        takeSelfieButton.addTarget(self,
+                                   action: #selector(takeSelfieButtonTapped),
+                                   for: .touchUpInside)
     }
     
     @objc func showMapButtonTapped() {
@@ -124,4 +130,47 @@ private extension MainViewController {
         toVC.modalPresentationStyle = .fullScreen
         present(toVC, animated: true, completion: nil)
     }
+    
+    @objc func takeSelfieButtonTapped() {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.sourceType = .camera
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true)
+    }
 }
+
+extension MainViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let image = extractImage(form: info)
+        print(image!)
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    private func extractImage(form info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
+        if let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage {
+            return image
+        } else if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            return image
+        } else {
+            return nil
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
