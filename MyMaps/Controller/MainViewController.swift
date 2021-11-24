@@ -8,8 +8,11 @@
 import UIKit
 import SwiftUI
 import Lottie
+import AVFoundation
 
 class MainViewController: UIViewController {
+    
+    var userPictureImage = UIImage()
     
     var name: String = "" {
         didSet {
@@ -132,9 +135,9 @@ private extension MainViewController {
     }
     
     @objc func takeSelfieButtonTapped() {
-        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
+        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
         let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = .camera
+        imagePickerController.sourceType = .photoLibrary
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
         present(imagePickerController, animated: true)
@@ -147,9 +150,10 @@ extension MainViewController: UINavigationControllerDelegate, UIImagePickerContr
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image = extractImage(form: info)
-        print(image!)
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true) { [weak self] in
+            guard let image = self?.extractImage(form: info) else { return }
+            self?.userPictureImage = image
+        }
     }
     
     private func extractImage(form info: [UIImagePickerController.InfoKey: Any]) -> UIImage? {
@@ -162,15 +166,3 @@ extension MainViewController: UINavigationControllerDelegate, UIImagePickerContr
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
