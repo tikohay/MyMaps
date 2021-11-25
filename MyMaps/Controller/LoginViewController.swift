@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import RealmSwift
+import RxSwift
+import RxCocoa
 
 class LoginViewController: UIViewController {
     
@@ -43,9 +46,9 @@ class LoginViewController: UIViewController {
                                                                     isSecured: true,
                                                                     accessibilityIdentifier: "passwordTF",
                                                                     autocorrectionType: .no)
-    var visualEffectView = UIVisualEffectView()
     
     private var isKeyboardShown = false
+    private var isInputFilled = false
     
     private let userDataRealm = UserDataRealm()
     
@@ -54,7 +57,7 @@ class LoginViewController: UIViewController {
         addTapGestureRecognizer()
         setupViews()
         addTargetToButtons()
-        blurViewWhenActiveResigned()
+        configureLoginBindings()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,16 +162,11 @@ private extension LoginViewController {
                                                   object: nil)
     }
     
-    func blurViewWhenActiveResigned() {
-        NotificationCenter.default.addObserver(forName: UIApplication.willResignActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.view.addSubview(self.visualEffectView)
-            self.visualEffectView.frame = (self.view.bounds)
-            self.visualEffectView.effect = UIBlurEffect(style: .light)
-        }
-        NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            guard let self = self else { return }
-            self.visualEffectView.effect = nil
+    func configureLoginBindings() {
+        _ = Observable.combineLatest(loginStandardTextField.textfield.rx.text, passwordStandardTextField.textfield.rx.text).map { login, password in
+            return !(login ?? "").isEmpty && !(password ?? "").isEmpty
+        }.bind { [weak self] inputFilled in
+            self?.isInputFilled = inputFilled
         }
     }
     
@@ -212,14 +210,13 @@ private extension LoginViewController {
         guard
             let login = loginStandardTextField.textfield.text,
             let password = passwordStandardTextField.textfield.text,
-            loginStandardTextField.textfield.text != "",
-            passwordStandardTextField.textfield.text != ""
+            isInputFilled == true
         else { presentAlertInfo(title: "Warning",
                                 text: "Login or password is wrong",
                                 withOneOkButton: true)
             return
         }
-        
+
         userDataRealm.getSpecificUserData(for: login) { userData in
             guard
                 let userData = userData

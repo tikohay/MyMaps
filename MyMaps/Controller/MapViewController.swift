@@ -9,6 +9,7 @@ import UIKit
 import GoogleMaps
 import CoreLocation
 import RealmSwift
+import RxSwift
 
 class MapViewController: UIViewController {
     
@@ -93,8 +94,9 @@ class MapViewController: UIViewController {
     private var geocoder = CLGeocoder()
     private var route: GMSPolyline?
     private var routePath: GMSMutablePath?
+    private var locationManager = LocationManager.instanse
     
-    private var locationManager = CLLocationManager()
+    private let disposeBag = DisposeBag()
     
     private var allLocations:[CLLocationCoordinate2D] = []
     
@@ -277,7 +279,16 @@ private extension MapViewController {
     }
     
     func configureLocation() {
-        configureLocationManager()
+        _ = locationManager.location.asObservable().bind { location in
+            self.allLocations.append(location.coordinate)
+            self.routePath?.add(location.coordinate)
+            self.route?.path = self.routePath
+            let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
+            self.mapView.animate(to: position)
+            self.geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
+                print(places?.first ?? "couldn't find place")
+            })
+        }.disposed(by: disposeBag)
     }
     
     func configureMapCoordinate() {
@@ -303,14 +314,6 @@ private extension MapViewController {
     func removeMarker() {
         marker?.map = nil
         marker = nil
-    }
-    
-    func configureLocationManager() {
-        locationManager.delegate = self
-        locationManager.allowsBackgroundLocationUpdates = true
-        locationManager.pausesLocationUpdatesAutomatically = false
-        locationManager.startMonitoringSignificantLocationChanges()
-        locationManager.requestAlwaysAuthorization()
     }
     
     func createPathFromLocations() {
@@ -341,23 +344,5 @@ extension MapViewController: GMSMapViewDelegate {
             marker.icon = GMSMarker.markerImage(with: .green)
             self.manualMarker = marker
         }
-    }
-}
-
-extension MapViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let location = locations.last else { return }
-        allLocations.append(location.coordinate)
-        routePath?.add(location.coordinate)
-        route?.path = routePath
-        let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-        mapView.animate(to: position)
-        geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
-            print(places?.first ?? "couldn't find place")
-        })
-    }
-    
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print(error)
     }
 }

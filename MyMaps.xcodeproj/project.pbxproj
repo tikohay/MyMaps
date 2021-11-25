@@ -18,6 +18,7 @@
 		3C80FF0C273AABD600D0BEFC /* UserDataRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF0B273AABD600D0BEFC /* UserDataRealm.swift */; };
 		3C8D22698FBEFF56BB6A916B /* Pods_MyMaps_MyMapsUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C035E1FFE0CAD2A4912CC5C /* Pods_MyMaps_MyMapsUITests.framework */; };
 		3CA63E6D273BD4D70083DB2B /* Animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 3CA63E6C273BD4D70083DB2B /* Animation.json */; };
+		3CB7A86A2743E46F00C53CD3 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CB7A8692743E46F00C53CD3 /* LocationManager.swift */; };
 		3CBD4CD92732760400151A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CD82732760400151A9A /* AppDelegate.swift */; };
 		3CBD4CDB2732760400151A9A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CDA2732760400151A9A /* SceneDelegate.swift */; };
 		3CBD4CDD2732760400151A9A /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CBD4CDC2732760400151A9A /* MapViewController.swift */; };
@@ -68,6 +69,7 @@
 		3C80FF09273A9FB600D0BEFC /* Launch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Launch.swift; sourceTree = "<group>"; };
 		3C80FF0B273AABD600D0BEFC /* UserDataRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataRealm.swift; sourceTree = "<group>"; };
 		3CA63E6C273BD4D70083DB2B /* Animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Animation.json; sourceTree = "<group>"; };
+		3CB7A8692743E46F00C53CD3 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		3CBD4CD52732760400151A9A /* MyMaps.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyMaps.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3CBD4CD82732760400151A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3CBD4CDA2732760400151A9A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				3CBD4D1227340B0C00151A9A /* MapTypeEnum.swift */,
 				3CBD4D0E273297A600151A9A /* MapStyleJson.swift */,
 				3CC93A4F2739076400196091 /* Colors.swift */,
+				3CB7A8692743E46F00C53CD3 /* LocationManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				3C80FF06273A6D6600D0BEFC /* RegistrationViewController.swift in Sources */,
 				3CBD4D0D273290DC00151A9A /* UIColor + Extensions.swift in Sources */,
 				3C0A0D8D273814ED006C1B98 /* AlertInfoViewController.swift in Sources */,
+				3CB7A86A2743E46F00C53CD3 /* LocationManager.swift in Sources */,
 				3C0A0D8B2737C2F4006C1B98 /* LocationRealm.swift in Sources */,
 				3CBD4CD92732760400151A9A /* AppDelegate.swift in Sources */,
 				3C80FF08273A7D1D00D0BEFC /* MainViewController.swift in Sources */,
