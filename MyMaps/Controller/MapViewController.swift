@@ -129,7 +129,7 @@ private extension MapViewController {
             mapView.topAnchor.constraint(equalTo: view.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            mapView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -153,7 +153,6 @@ private extension MapViewController {
         bottomButtonsStackView.translatesAutoresizingMaskIntoConstraints = false
         
         mapView.addSubview(buttonsStackView)
-//        mapView.addSubview(showLastPathButton)
         mapView.addSubview(bottomButtonsStackView)
         
         NSLayoutConstraint.activate([
@@ -240,8 +239,8 @@ private extension MapViewController {
         let frame = buttonsStackView?.convert(mapTypeButton.frame, to: self.view)
         let toVC = MapTypeViewController()
         toVC.containerViewFrame = frame
-        toVC.onTypeButton = { type in
-            self.mapView.mapType = type
+        toVC.onTypeButton = { [weak self] type in
+            self?.mapView.mapType = type
         }
         toVC.modalPresentationStyle = .overCurrentContext
         toVC.modalTransitionStyle = .crossDissolve
@@ -253,12 +252,12 @@ private extension MapViewController {
             let toVC = AlertInfoViewController(title: "Need to stop tracking", text: "Stop tracking ?")
             toVC.modalPresentationStyle = .overCurrentContext
             toVC.modalTransitionStyle = .crossDissolve
-            toVC.onOkButtonTapped = {
-                self.isUpdatedLocation = false
-                self.locationManager.stopUpdatingLocation()
-                self.locationRealm.deleteAllLocations()
-                self.locationRealm.addCoordinate(self.allLocations)
-                self.createPathFromLocations()
+            toVC.onOkButtonTapped = { [weak self] in
+                self?.isUpdatedLocation = false
+                self?.locationManager.stopUpdatingLocation()
+                self?.locationRealm.deleteAllLocations()
+                self?.locationRealm.addCoordinate(self?.allLocations ?? [])
+                self?.createPathFromLocations()
             }
             self.present(toVC, animated: true, completion: nil)
         } else {
@@ -279,13 +278,13 @@ private extension MapViewController {
     }
     
     func configureLocation() {
-        _ = locationManager.location.asObservable().bind { location in
-            self.allLocations.append(location.coordinate)
-            self.routePath?.add(location.coordinate)
-            self.route?.path = self.routePath
+        _ = locationManager.location.asObservable().bind { [weak self] location in
+            self?.allLocations.append(location.coordinate)
+            self?.routePath?.add(location.coordinate)
+            self?.route?.path = self?.routePath
             let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
-            self.mapView.animate(to: position)
-            self.geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
+            self?.mapView.animate(to: position)
+            self?.geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
                 print(places?.first ?? "couldn't find place")
             })
         }.disposed(by: disposeBag)
@@ -320,16 +319,16 @@ private extension MapViewController {
         route?.map = nil
         routePath = GMSMutablePath()
         route = GMSPolyline()
-        locationRealm.getAllLocations { locations in
+        locationRealm.getAllLocations { [weak self] locations in
             for location in locations {
-                self.routePath?.add(location)
-                self.route?.path = routePath
+                self?.routePath?.add(location)
+                self?.route?.path = routePath
                 route?.strokeColor = .blue
                 route?.strokeWidth = 10
                 route?.map = mapView
             }
             let bounds = GMSCoordinateBounds(path: routePath!)
-            self.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
+            self?.mapView.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50))
         }
     }
 }

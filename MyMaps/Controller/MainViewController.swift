@@ -79,7 +79,7 @@ private extension MainViewController {
         self.view.addSubview(stackView)
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 30),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             travelAnimation.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
