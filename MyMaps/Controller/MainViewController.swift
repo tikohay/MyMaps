@@ -135,9 +135,9 @@ private extension MainViewController {
     }
     
     @objc func takeSelfieButtonTapped() {
-        guard UIImagePickerController.isSourceTypeAvailable(.photoLibrary) else { return }
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else { return }
         let imagePickerController = UIImagePickerController()
-        imagePickerController.sourceType = .photoLibrary
+        imagePickerController.sourceType = .camera
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
         present(imagePickerController, animated: true)
