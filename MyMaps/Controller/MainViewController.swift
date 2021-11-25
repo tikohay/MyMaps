@@ -152,7 +152,9 @@ extension MainViewController: UINavigationControllerDelegate, UIImagePickerContr
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true) { [weak self] in
             guard let image = self?.extractImage(form: info) else { return }
-            self?.userPictureImage = image
+            if let data = image.pngData() {
+                self?.addDataToDisk(data: data)
+            }
         }
     }
     
@@ -163,6 +165,18 @@ extension MainViewController: UINavigationControllerDelegate, UIImagePickerContr
             return image
         } else {
             return nil
+        }
+    }
+    
+    func addDataToDisk(data: Data) {
+        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let url = documents.appendingPathComponent("selfieImage.png")
+        
+        do {
+            try data.write(to: url)
+            UserDefaults.standard.set(url, forKey: "selfieImage")
+        } catch {
+            print("Unable to Write Data to Disk (\(error)")
         }
     }
 }

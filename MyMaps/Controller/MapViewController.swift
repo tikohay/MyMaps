@@ -84,6 +84,14 @@ class MapViewController: UIViewController {
         return button
     }()
     
+    private let userSelfieImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.frame = CGRect.init(x: 0, y: 0, width: 30, height: 30)
+        return imageView
+    }()
+    
+    private var selfieImage = UIImage()
+    
     private var isAddedMarker = false
     private var isUpdatedLocation = false
     
@@ -91,6 +99,7 @@ class MapViewController: UIViewController {
                                                        longitude: 37.622504)
     private var marker: GMSMarker?
     private var manualMarker: GMSMarker?
+    private var selfieMarker = GMSMarker()
     private var geocoder = CLGeocoder()
     private var route: GMSPolyline?
     private var routePath: GMSMutablePath?
@@ -102,7 +111,7 @@ class MapViewController: UIViewController {
     
     let locationRealm = LocationRealm()
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Colors.whiteColor
@@ -278,12 +287,26 @@ private extension MapViewController {
     }
     
     func configureLocation() {
+        if let url = UserDefaults.standard.url(forKey: "selfieImage"),
+           let image = convertUrlToImage(url: url) {
+            selfieImage = image
+            userSelfieImageView.image = selfieImage
+        }
         _ = locationManager.location.asObservable().bind { [weak self] location in
+            if !self!.isUpdatedLocation {
+                self?.selfieMarker = GMSMarker(position: location.coordinate)
+                self?.selfieMarker.iconView = self?.userSelfieImageView
+                self?.selfieMarker.map = self?.mapView
+            } else {
+                self?.selfieMarker.map = nil
+            }
+            
             self?.allLocations.append(location.coordinate)
             self?.routePath?.add(location.coordinate)
             self?.route?.path = self?.routePath
             let position = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 17)
             self?.mapView.animate(to: position)
+            
             self?.geocoder.reverseGeocodeLocation(location, completionHandler: { places, error in
                 print(places?.first ?? "couldn't find place")
             })
@@ -343,5 +366,14 @@ extension MapViewController: GMSMapViewDelegate {
             marker.icon = GMSMarker.markerImage(with: .green)
             self.manualMarker = marker
         }
+    }
+    
+    private func convertUrlToImage(url: URL) -> UIImage? {
+        guard
+            let data = try? Data(contentsOf: url),
+            let image = UIImage(data: data)
+        else { return nil }
+        
+        return image
     }
 }
