@@ -10,33 +10,40 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
-    
+
     var visualEffectView = UIVisualEffectView()
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+
         guard let windowScene = (scene as? UIWindowScene) else { return }
-        
+
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
-        
+
         window?.rootViewController = Launch()
         window?.makeKeyAndVisible()
+
+        NotificationService.shared.requestAuthorization()
     }
 
-    func sceneDidDisconnect(_ scene: UIScene) {
-        // Called as the scene is being released by the system.
-        // This occurs shortly after the scene enters the background, or when its session is discarded.
-        // Release any resources associated with this scene that can be re-created the next time the scene connects.
-        // The scene may re-connect later, as its session was not necessarily discarded (see `application:didDiscardSceneSessions` instead).
-    }
+    func sceneDidDisconnect(_ scene: UIScene) { }
 
     func sceneDidBecomeActive(_ scene: UIScene) {
-        self.visualEffectView.effect = nil
-        self.visualEffectView.removeFromSuperview()
+        removeBlurView()
     }
 
     func sceneWillResignActive(_ scene: UIScene) {
+        addBlurView()
+        setupNotificationService()
+    }
+
+    func sceneWillEnterForeground(_ scene: UIScene) {
+        removeBlurView()
+    }
+
+    func sceneDidEnterBackground(_ scene: UIScene) { }
+
+    private func addBlurView() {
         if !self.visualEffectView.isDescendant(of: self.window!) {
             self.window?.addSubview(self.visualEffectView)
         }
@@ -47,15 +54,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
 
-    func sceneWillEnterForeground(_ scene: UIScene) {
+    private func removeBlurView() {
         self.visualEffectView.effect = nil
         self.visualEffectView.removeFromSuperview()
     }
 
-    func sceneDidEnterBackground(_ scene: UIScene) {
-        // Called as the scene transitions from the foreground to the background.
-        // Use this method to save data, release shared resources, and store enough scene-specific state information
-        // to restore the scene back to its current state.
+    private func setupNotificationService() {
+        let notificationService = NotificationService.shared
+
+        notificationService.checkNotificationAuthorization { settings in
+            switch settings.authorizationStatus {
+            case .authorized:
+                notificationService
+                    .sendNotificatoinRequest(content: notificationService.makeNotificationContent(),
+                                             trigger: notificationService.makeIntervalNotificationTrigger(time: (30 * 60)))
+            case .denied:
+                print("not allowed")
+            case .notDetermined:
+                print("incomprehensibly")
+            default:
+                print("default")
+            }
+        }
     }
 }
 

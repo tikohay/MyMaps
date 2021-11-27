@@ -14,65 +14,9 @@ import SwiftUI
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+
         GMSServices.provideAPIKey("AIzaSyCns-fqtBjhyr9U12_NmTlWJPG91qYCkx8")
-        
-        NotificationService.shared.checkNotificationAuthorization {
-            NotificationService.shared.sendNotificatoinRequest(content: NotificationService.shared.makeNotificationContent(),
-                                                               trigger: NotificationService.shared.makeIntervalNotificationTrigger())
-        }
-        
-//        let center = UNUserNotificationCenter.current()
-//        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-//            guard granted else {
-//                print("not allowed")
-//                return
-//            }
-//            sendNotificatoinRequest(content: makeNotificationContent(),
-//                                    trigger: makeIntervalNotificationTrigger())
-//        }
-//
-//        center.getNotificationSettings { settings in
-//            switch settings.authorizationStatus {
-//            case .authorized:
-//                print("allowed")
-//            case .denied:
-//                print("not allowed")
-//            case .notDetermined:
-//                print("incomprehensibly")
-//            default:
-//                print("default")
-//            }
-//        }
-//
-//        func makeNotificationContent() -> UNNotificationContent {
-//            let content = UNMutableNotificationContent()
-//            content.title = "hello"
-//            content.subtitle = "it's time to see where you are"
-//            content.body = "will you take a look ?"
-//            content.badge = 1
-//            return content
-//        }
-//
-//        func makeIntervalNotificationTrigger() -> UNNotificationTrigger {
-//            return UNTimeIntervalNotificationTrigger(timeInterval: (30*60),
-//                                                     repeats: false)
-//        }
-//
-//        func sendNotificatoinRequest(content: UNNotificationContent,
-//                                     trigger: UNNotificationTrigger) {
-//            let request = UNNotificationRequest(identifier: "alarm",
-//                                                content: content,
-//                                                trigger: trigger)
-//
-//            let center = UNUserNotificationCenter.current()
-//            center.add(request) { error in
-//                if let error = error {
-//                    print(error.localizedDescription)
-//                }
-//            }
-//        }
-        
+
         return true
     }
 
