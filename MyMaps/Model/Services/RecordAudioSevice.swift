@@ -11,23 +11,12 @@ import UIKit
 
 class RecordAudioService: NSObject {
     
-    var recorder: AVAudioRecorder?
+    private var recorder: AVAudioRecorder?
+    private var audioPlayer: AVAudioPlayer?
+    var isPlaying = false
     
     func recordNewAudio() {
-        let documentsUrl = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0]
-        let url = documentsUrl.appendingPathComponent("newRecord.m4a")
-        
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
-            recorder = try AVAudioRecorder(url: url,
-                                           settings: [AVFormatIDKey: kAudioFormatMPEG4AAC,
-                                                      AVSampleRateKey: 44100.0,
-                                                      AVNumberOfChannelsKey: 2])
-        } catch {
-            print(error.localizedDescription)
-        }
-        recorder?.delegate = self
-        recorder?.prepareToRecord()
+        prepareRecordNewAudio()
         recorder?.record()
     }
     
@@ -36,15 +25,65 @@ class RecordAudioService: NSObject {
             recorder?.stop()
         }
     }
+    
+    func playRecord() {
+        if FileManager.default.fileExists(atPath: getUrl(for: "newRecord.m4a").path) {
+            preparePlay()
+            audioPlayer?.play()
+            isPlaying = true
+        }
+    }
+    
+    func stopPlayingRecord() {
+        audioPlayer?.pause()
+        isPlaying = false
+    }
+    
+    private func prepareRecordNewAudio() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playAndRecord)
+            recorder = try AVAudioRecorder(url: getUrl(for: "newRecord.m4a"),
+                                           settings: [AVFormatIDKey: kAudioFormatMPEG4AAC,
+                                                      AVSampleRateKey: 44100.0,
+                                                      AVNumberOfChannelsKey: 2])
+        } catch {
+            print(error.localizedDescription)
+        }
+        recorder?.delegate = self
+        recorder?.prepareToRecord()
+    }
+    
+    
+    private func preparePlay() {
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: getUrl(for: "newRecord.m4a"))
+            audioPlayer?.delegate = self
+            audioPlayer?.prepareToPlay()
+        }
+        catch {
+            print("Error")
+        }
+    }
+    
+    private func getUrl(for file: String) -> URL {
+        let paths = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)
+        let url = paths[0].appendingPathComponent(file)
+        return url
+    }
 }
 
-extension RecordAudioService: AVAudioRecorderDelegate {
+extension RecordAudioService: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
+        print(flag)
         try? AVAudioSession.sharedInstance().setCategory(.playback)
     }
     
     func audioRecorderBeginInterruption(_ recorder: AVAudioRecorder) {
         self.recorder = nil
         try? AVAudioSession.sharedInstance().setCategory(.playback)
+    }
+    
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        isPlaying = false
     }
 }

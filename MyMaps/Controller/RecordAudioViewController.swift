@@ -40,6 +40,8 @@ class RecordAudioViewController: UIViewController {
     }()
     
     private var isRecording = false
+    
+    private let recordService = RecordAudioService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,14 +101,20 @@ private extension RecordAudioViewController {
             recordButton.setImage(UIImage(systemName: "pause.circle"), for: .normal)
             recordAnimation.play(completion: nil)
             playAudioButton.isEnabled = false
+            recordService.recordNewAudio()
         } else {
             recordButton.setImage(UIImage(systemName: "record.circle"), for: .normal)
             recordAnimation.stop()
             playAudioButton.isEnabled = true
+            recordService.stopRecord()
         }
     }
     
     @objc func playAudioButtonTapped() {
-        
+        if !recordService.isPlaying {
+            recordService.playRecord()
+        } else {
+            recordService.stopPlayingRecord()
+        }
     }
 }
