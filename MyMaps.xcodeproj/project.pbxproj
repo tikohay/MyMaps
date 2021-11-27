@@ -11,6 +11,7 @@
 		3C0A0D8D273814ED006C1B98 /* AlertInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A0D8C273814ED006C1B98 /* AlertInfoViewController.swift */; };
 		3C0A0D902738151E006C1B98 /* UIButton + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C0A0D8F2738151E006C1B98 /* UIButton + Extensions.swift */; };
 		3C11D781275233D20034682B /* audioRecordAnimation.json in Resources */ = {isa = PBXBuildFile; fileRef = 3C11D780275233D20034682B /* audioRecordAnimation.json */; };
+		3C11D784275262B00034682B /* RecordAudioServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C11D783275262B00034682B /* RecordAudioServiceDelegate.swift */; };
 		3C80FF02273A6BEC00D0BEFC /* MyMapsStandardTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF01273A6BEC00D0BEFC /* MyMapsStandardTextField.swift */; };
 		3C80FF04273A6C3600D0BEFC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF03273A6C3600D0BEFC /* LoginViewController.swift */; };
 		3C80FF06273A6D6600D0BEFC /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C80FF05273A6D6600D0BEFC /* RegistrationViewController.swift */; };
@@ -68,6 +69,7 @@
 		3C0A0D8C273814ED006C1B98 /* AlertInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInfoViewController.swift; sourceTree = "<group>"; };
 		3C0A0D8F2738151E006C1B98 /* UIButton + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton + Extensions.swift"; sourceTree = "<group>"; };
 		3C11D780275233D20034682B /* audioRecordAnimation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = audioRecordAnimation.json; sourceTree = "<group>"; };
+		3C11D783275262B00034682B /* RecordAudioServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAudioServiceDelegate.swift; sourceTree = "<group>"; };
 		3C80FF01273A6BEC00D0BEFC /* MyMapsStandardTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyMapsStandardTextField.swift; sourceTree = "<group>"; };
 		3C80FF03273A6C3600D0BEFC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		3C80FF05273A6D6600D0BEFC /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
@@ -138,6 +140,14 @@
 				3C0A0D8F2738151E006C1B98 /* UIButton + Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		3C11D782275261E70034682B /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				3C11D783275262B00034682B /* RecordAudioServiceDelegate.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		3CB306B4274D2D1D00664759 /* Map */ = {
@@ -217,6 +227,7 @@
 				3CB306B4274D2D1D00664759 /* Map */,
 				3CC93A4E2739068000196091 /* Realm */,
 				3CB306B5274D2D3500664759 /* Services */,
+				3C11D782275261E70034682B /* Protocols */,
 				3CC93A4F2739076400196091 /* Colors.swift */,
 			);
 			path = Model;
@@ -575,6 +586,7 @@
 				3C80FF06273A6D6600D0BEFC /* RegistrationViewController.swift in Sources */,
 				3CBD4D0D273290DC00151A9A /* UIColor + Extensions.swift in Sources */,
 				3C0A0D8D273814ED006C1B98 /* AlertInfoViewController.swift in Sources */,
+				3C11D784275262B00034682B /* RecordAudioServiceDelegate.swift in Sources */,
 				3CFDEF00274E70DF001F1001 /* PhotoViewController.swift in Sources */,
 				3CB7A86A2743E46F00C53CD3 /* LocationManager.swift in Sources */,
 				3C0A0D8B2737C2F4006C1B98 /* LocationRealm.swift in Sources */,

@@ -13,6 +13,7 @@ class RecordAudioService: NSObject {
     
     private var recorder: AVAudioRecorder?
     private var audioPlayer: AVAudioPlayer?
+    var delegate: RecordAudioServiceDelegate?
     var isPlaying = false
     
     func recordNewAudio() {
@@ -74,7 +75,6 @@ class RecordAudioService: NSObject {
 
 extension RecordAudioService: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        print(flag)
         try? AVAudioSession.sharedInstance().setCategory(.playback)
     }
     
@@ -85,5 +85,6 @@ extension RecordAudioService: AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     
     func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         isPlaying = false
+        delegate?.recordDidFinishPlaying()
     }
 }

@@ -46,6 +46,7 @@ class RecordAudioViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        recordService.delegate = self
         setupViews()
         addTargets()
     }
@@ -112,9 +113,17 @@ private extension RecordAudioViewController {
     
     @objc func playAudioButtonTapped() {
         if !recordService.isPlaying {
+            playAudioButton.setImage(UIImage(systemName: "stop.circle.fill"), for: .normal)
             recordService.playRecord()
         } else {
             recordService.stopPlayingRecord()
+            playAudioButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
         }
+    }
+}
+
+extension RecordAudioViewController: RecordAudioServiceDelegate {
+    func recordDidFinishPlaying() {
+        playAudioButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
     }
 }
