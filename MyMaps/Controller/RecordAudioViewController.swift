@@ -39,6 +39,26 @@ class RecordAudioViewController: UIViewController {
         return button
     }()
     
+    private let containerView: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 20
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.backgroundColor = .black
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    private let timerLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont(name: "Avenir Book", size: 20)
+        label.textColor = Colors.whiteColor
+        label.text = "hello"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    private var interactiveAnimator = UIViewPropertyAnimator()
+    
     private var isRecording = false
     
     private let recordService = RecordAudioService()
@@ -49,6 +69,7 @@ class RecordAudioViewController: UIViewController {
         recordService.delegate = self
         setupViews()
         addTargets()
+        addGestures()
     }
 }
 
@@ -68,19 +89,29 @@ private extension RecordAudioViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(recordAnimation)
-        view.addSubview(stackView)
+        view.addSubview(containerView)
+        containerView.addSubview(stackView)
+        containerView.addSubview(timerLabel)
         
         NSLayoutConstraint.activate([
-            recordAnimation.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            recordAnimation.topAnchor.constraint(equalTo: view.topAnchor, constant: 20),
             recordAnimation.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             recordAnimation.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -15),
-            recordAnimation.bottomAnchor.constraint(equalTo: recordButton.topAnchor, constant: -50),
+            recordAnimation.bottomAnchor.constraint(equalTo: containerView.topAnchor, constant: -50),
+            
+            containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerView.heightAnchor.constraint(equalToConstant: 150),
             
             recordButton.heightAnchor.constraint(equalToConstant: 80),
             recordButton.widthAnchor.constraint(equalToConstant: 80),
             
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50)
+            stackView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            stackView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            
+            timerLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            timerLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)
         ])
     }
 }
@@ -122,8 +153,57 @@ private extension RecordAudioViewController {
     }
 }
 
+//MARK: - Setup observers and gestures
+extension RecordAudioViewController {
+    private func addGestures() {
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(onPan(_:)))
+        view.addGestureRecognizer(panRecognizer)
+    }
+    
+    @objc func onPan(_ recognizer: UIPanGestureRecognizer) {
+        switch recognizer.state {
+        case .began:
+            interactiveAnimator.startAnimation()
+            interactiveAnimator = UIViewPropertyAnimator(duration: 0.5,
+                                                         dampingRatio: .greatestFiniteMagnitude,
+                                                         animations: {
+                self.containerView.transform = CGAffineTransform(translationX: 0,
+                                                                 y: self.containerView.frame.height)
+            })
+            interactiveAnimator.pauseAnimation()
+        case .changed:
+            let translation = recognizer.translation(in: self.view)
+            interactiveAnimator.fractionComplete = translation.y / 300
+            let relativeTranslation = translation.y / (view?.bounds.width ?? 1)
+            let progress = max(0, min(1, relativeTranslation))
+//            self.shouldDismissController = progress > 0.35
+        case .ended:
+//            if shouldDismissController {
+                interactiveAnimator.stopAnimation(true)
+//                UIView.animate(withDuration: 0.2) {
+//                    self.containerView.transform = .init(translationX: 0, y: self.containerView.frame.height)
+//                } completion: { _ in
+//                    self.dismiss(animated: true, completion: nil)
+//                }
+//            } else {
+//                interactiveAnimator.addAnimations {
+//                    self.containerView.transform = .identity
+//                }
+//                interactiveAnimator.startAnimation()
+//            }
+        default:
+            return
+        }
+    }
+}
+
 extension RecordAudioViewController: RecordAudioServiceDelegate {
     func recordDidFinishPlaying() {
         playAudioButton.setImage(UIImage(systemName: "play.circle"), for: .normal)
+    }
+    
+    func getMeterTimer(timer: String) {
+        timerLabel.text = timer
+        print(timer)
     }
 }
