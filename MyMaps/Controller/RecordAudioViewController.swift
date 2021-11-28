@@ -41,7 +41,7 @@ class RecordAudioViewController: UIViewController {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 20
+        view.layer.cornerRadius = 30
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         view.backgroundColor = .black
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -133,7 +133,7 @@ private extension RecordAudioViewController {
             containerViewDragView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5),
             containerViewDragView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor, constant: 2),
             containerViewDragView.heightAnchor.constraint(equalToConstant: 5),
-            containerViewDragView.widthAnchor.constraint(equalToConstant: 50),
+            containerViewDragView.widthAnchor.constraint(equalToConstant: 70),
             
             recordButton.heightAnchor.constraint(equalToConstant: 80),
             recordButton.widthAnchor.constraint(equalToConstant: 80),
