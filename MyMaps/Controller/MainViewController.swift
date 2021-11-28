@@ -45,9 +45,13 @@ class MainViewController: UIViewController {
                                       titleColor: .white)
     
     private let takeSelfieButton = ExtendedButton(title: "Take selfie",
-                                                  backgroundColor: Colors.whiteColor,
-                                                  titleColor: .black,
-                                                  isShadow: true)
+                                                  backgroundColor: .lightGray,
+                                                  titleColor: .white)
+    
+    private let recordAudioButton = ExtendedButton(title: "Record audio",
+                                                   backgroundColor: Colors.whiteColor,
+                                                   titleColor: .black,
+                                                   isShadow: true)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,10 +78,11 @@ private extension MainViewController {
         
         let stackView = UIStackView(arrangedSubviews: [showMapButton,
                                                        logoutButton,
-                                                       takeSelfieButton])
+                                                       takeSelfieButton,
+                                                       recordAudioButton])
         stackView.axis = .vertical
         stackView.distribution = .fill
-        stackView.spacing = 20
+        stackView.spacing = 10
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -94,8 +99,8 @@ private extension MainViewController {
             travelAnimation.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             travelAnimation.heightAnchor.constraint(equalToConstant: 250),
             
-            stackView.topAnchor.constraint(equalTo: travelAnimation.bottomAnchor, constant: 30),
-            stackView.widthAnchor.constraint(equalToConstant: 100),
+            stackView.topAnchor.constraint(equalTo: travelAnimation.bottomAnchor, constant: 10),
+            stackView.widthAnchor.constraint(equalToConstant: 150),
             stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
@@ -113,6 +118,9 @@ private extension MainViewController {
         takeSelfieButton.addTarget(self,
                                    action: #selector(takeSelfieButtonTapped),
                                    for: .touchUpInside)
+        recordAudioButton.addTarget(self,
+                                    action: #selector(recordAudioButtonTapped),
+                                    for: .touchUpInside)
     }
     
     @objc func showMapButtonTapped() {
@@ -141,6 +149,13 @@ private extension MainViewController {
         imagePickerController.allowsEditing = true
         imagePickerController.delegate = self
         present(imagePickerController, animated: true)
+    }
+    
+    @objc func recordAudioButtonTapped() {
+        let toVC = RecordAudioViewController()
+        toVC.modalTransitionStyle = .crossDissolve
+        toVC.modalPresentationStyle = .fullScreen
+        present(toVC, animated: true, completion: nil)
     }
 }
 
