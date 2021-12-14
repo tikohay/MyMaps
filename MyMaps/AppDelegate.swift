@@ -7,14 +7,16 @@
 
 import UIKit
 import GoogleMaps
+import UserNotifications
+import SwiftUI
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
+
         GMSServices.provideAPIKey("AIzaSyCns-fqtBjhyr9U12_NmTlWJPG91qYCkx8")
-        
+
         return true
     }
 
